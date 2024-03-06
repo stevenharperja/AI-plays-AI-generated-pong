@@ -86,6 +86,7 @@ We will also compare this with an agent trained by overfitting (training on game
 
 ### Metrics and Criteria for Success
 Making an agent model trained on both the diffusion model and real Pong which performs better than a model trained using the same amount of real Pong iterations but no diffusion model interactions.
+Even if the diffusion model ends up taking longer to run than an instance of Pong, it is still worthwhile because when this technique is extended to more difficult games or to real-life scenarios, running a diffusion model can be cheaper/faster than running that game or potentially losing a robot. 
 
 ## 7. Results and Analysis
 ### Results
