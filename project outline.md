@@ -109,6 +109,7 @@ List any references or resources used in the project
         - https://www.analyticsvidhya.com/blog/2022/10/image-segmentation-with-u-net/ (Unet?)
     - https://github.com/lucidrains/denoising-diffusion-pytorch (pytorch implementation)(has links to youtube videos along with lots more info) <- very nice
     - https://github.com/hojonathanho/diffusion (tensorflow implemenation)
+    - https://medium.com/@kemalpiro/step-by-step-visual-introduction-to-diffusion-models-235942d2f15c (more info on Diffusion models)
 - Pong RL
     - http://karpathy.github.io/2016/05/31/rl/ (full code implementation of Pong AI)
     
