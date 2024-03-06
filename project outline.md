@@ -28,7 +28,7 @@ Project Outline - Pong RL-GAN
     Players use the paddles to hit a ball back and forth.
     The goal is for each player to reach eleven points before the opponent;
     points are earned when one fails to return the ball to the other.
-    --Wikipedia (https://en.wikipedia.org/wiki/Pong)
+    [Wikipedia](https://en.wikipedia.org/wiki/Pong)
     ![Pong Game](https://upload.wikimedia.org/wikipedia/commons/6/62/Pong_Game_Test2.gif)
 
     We will be using Pong and assigning a +1 reward to the agent whenever it scores a point, and -1 reward when the opponent scores a point.
