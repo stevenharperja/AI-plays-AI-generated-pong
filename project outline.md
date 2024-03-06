@@ -102,6 +102,8 @@ Summarize the project and its outcomes
 ### Limitations and Future Improvements
 Discuss any limitations or future improvements
 
+The techniques used with both the Diffusion and AI agent likely don't let the models have a lot of "memory" of previous frames, so when extended to more complex environments it would be better to change the model architectures.
+
 ## 9. References
 List any references or resources used in the project
 - About diffusion networks
