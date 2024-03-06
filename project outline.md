@@ -1,4 +1,4 @@
-# Project Outline - Pong RL-GAN
+# Project Outline - Pong RL-Diffusion
 
 ## 1. Introduction
 ### Overview
