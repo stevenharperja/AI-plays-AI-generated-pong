@@ -14,13 +14,13 @@ We repeat this a number of times and compare the results of the training vs an A
 ### Project Goals
 The goals of this project are to show how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots.
 
-### Pong RL-Diffusion Objectives
+### Why I chose this project
 I hope to show a proof of concept that could be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
 This technique can be and already is applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.
 I hope to learn more about diffusion models and Reinforcement learning techniques.
 
 ## 3. Background
-### Pong Game
+### Pong
 Pong is a two-dimensional sports game that simulates table tennis.
 The player controls an in-game paddle by moving it vertically across the left or right side of the screen.
 They can compete against another player controlling a second paddle on the opposing side.
