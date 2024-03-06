@@ -48,13 +48,14 @@ It has been a popular type of model for image generation in recent years. So I t
 
 ## 4. Methodology
 ### Approach
-We will start by making the Pong agent and testing it playing Pong.
-Then we will make the diffusion model.
-The diffusion model will be trained on the Pong scenes and will act as a recurrent neural network, taking the previous image it generated as an embedding for the next image.
-The diffusion model will need to output a displayed Pong image and rewards to go alongside it.
-The diffusion model will take an additional embedding conveying what buttons are being pushed in each image. The agent can then supply the button presses or they can be picked randomly.
-The agent will train on the data from the diffusion model, as well as its own real games of Pong.
-The agent will need to take in a Pong image, rewards, and output its own button inputs to send to the Pong environment in OpenAI's Gym.
+We will start by making the Pong agent and testing it playing Pong. 
+Then we will make the diffusion model. 
+The diffusion model will be trained on the Pong scenes and will act as a recurrent neural network, taking the previous image it generated as an embedding for the next image. 
+The diffusion model will need to output a displayed Pong image and rewards to go alongside it. 
+The diffusion model will take an additional embedding conveying what buttons are being pushed in each image. The agent can then supply the button presses or they can be picked randomly. 
+The agent will train on the data from the diffusion model, as well as its own real games of Pong. 
+The agent will need to take in a Pong image, rewards, and output its own button inputs to send to the Pong environment in OpenAI's Gym. 
+The agent will just see the difference between one frame and the next, and diffusion will only create the difference between one frame and the next like in http://karpathy.github.io/2016/05/31/rl/ 
 
 ### RL Algorithm and Diffusion Model Architecture
 We will use a fully connected neural network for the Pong agent. Or maybe I'll find some more complex one and use that.
@@ -108,4 +109,6 @@ List any references or resources used in the project
         - https://www.analyticsvidhya.com/blog/2022/10/image-segmentation-with-u-net/ (Unet?)
     - https://github.com/lucidrains/denoising-diffusion-pytorch (pytorch implementation)(has links to youtube videos along with lots more info) <- very nice
     - https://github.com/hojonathanho/diffusion (tensorflow implemenation)
+- Pong RL
+    - http://karpathy.github.io/2016/05/31/rl/ (full code implementation of Pong AI)
     
