@@ -106,6 +106,6 @@ List any references or resources used in the project
     - https://www.assemblyai.com/blog/diffusion-models-for-machine-learning-introduction/ (mathy explanation along with code walk through) <- very nice
         - https://kikaben.com/up-sampling-with-transposed-convolution/ (what is up-convolution)
         - https://www.analyticsvidhya.com/blog/2022/10/image-segmentation-with-u-net/ (Unet?)
-    - https://github.com/lucidrains/denoising-diffusion-pytorch (pytorch implementation)(has links to youtube videos along with lots more info)
+    - https://github.com/lucidrains/denoising-diffusion-pytorch (pytorch implementation)(has links to youtube videos along with lots more info) <- very nice
     - https://github.com/hojonathanho/diffusion (tensorflow implemenation)
     
