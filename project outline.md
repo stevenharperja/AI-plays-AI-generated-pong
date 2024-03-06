@@ -18,7 +18,7 @@ The goals of this project are to show how well this technique works to improve f
 ### Why I chose this project
 I hope to show a proof of concept that could be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
 This technique can be and already is applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.  
-I hope to learn more about diffusion models and Reinforcement learning techniques.
+I hope to learn more about diffusion models and Reinforcement learning techniques by doing this project.
 
 ## 3. Background
 ### Pong
