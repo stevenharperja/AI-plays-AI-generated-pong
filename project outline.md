@@ -5,7 +5,7 @@
 This project is to test how well an image generating model can help an AI actor play Pong in as few sessions of real Pong as possible.
 Keywords: Few-shot Learning, Diffusion Networks, Reinforcement Learning
 
-### Pong RL-Diffusion
+### Process
 We start by having an AI agent play a few games of pong. Afterward, we use the screen data, input data, and reward data seen during those games to train a diffusion model.
 This diffusion model then creates scenes of "virtual pong" which the AI agent then trains on.
 We repeat this a number of times and compare the results of the training vs an AI agent which only trained on "real pong".
