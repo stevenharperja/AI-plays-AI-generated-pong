@@ -1,0 +1,89 @@
+Project Outline - Pong RL-GAN
+
+1. Introduction
+    - Brief overview of the project
+    This project is to test how well an image generating model can help an AI actor play Pong in as few sessions of real Pong as possible.
+    Keywords: Few-shot Learning, Generative Adversarial Networks, Diffusion Networks, Reinforcement Learning
+    - Explanation of Pong RL-GAN
+    We start by having an AI agent play a few games of pong. Afterward, we both train the agent, and 
+    we also use the screen data, input data, and reward data seen during those games to train an image generating model.
+    This image generating model then creates scenes of "virtual pong" which the AI agent then trains on.
+
+    We repeat this a number of times, and compare the results of the training vs an AI agent which only trained on "real pong"  
+
+2. Goals and Objectives
+    - Define the goals and objectives of the project
+    The goals of this project is to show how well this technique works to improve few shot learning, 
+    what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots.
+    - Specify what you aim to achieve with the Pong RL-GAN
+    I hope to show a proof of concept that could be extended to reinforcment learning in other fields such robotics, or simply to other more complex games than Pong. 
+    This technique can be and already is applied in other forms of machine learning and I want to demonstrate it with Pong because I like video games.
+
+3. Background
+    - Provide background information on Pong game
+    Pong is a two-dimensional sports game that simulates table tennis. 
+    The player controls an in-game paddle by moving it vertically across the left or right side of the screen. 
+    They can compete against another player controlling a second paddle on the opposing side. 
+    Players use the paddles to hit a ball back and forth. 
+    The goal is for each player to reach eleven points before the opponent; 
+    points are earned when one fails to return the ball to the other.
+    --Wikipedia (https://en.wikipedia.org/wiki/Pong)
+    <image> https://upload.wikimedia.org/wikipedia/commons/6/62/Pong_Game_Test2.gif
+
+    We will be using pong and assigning a +1 reward to the agent whenever it scores a point, and -1 reward when the opponent scores a point.
+    We will use OpenAI's Gym library to do this.
+
+    - Explain Reinforcement Learning (RL)
+    Reinforcement learning is the general term used to describe using machine learning to make a model which deals with 
+    time based situations while making decisions to navigate an environment,
+    Examples are self-driving cars, robotics, playing video games, etc.
+    The main difficulties of reinforcment learning are making a "good" model from a generally lacking amount of data, making models which are safe around humans, and can generalize to multiple tasks, etc.
+
+    - Explain Generative Adversarial Networks (GANs)
+    Generative Adversarial Networks are a type of neural network in which a Generator network produces pictures (or any other kind of data) when given random noise.
+    A Discriminator network then tries to train the generator to create pictures which look more like an example data set, in this case Pong screens. 
+    They are used to create data which looks like a dataset.
+    They are often used for image generators, though diffusion networks have taken over in popularity in recent years.
+    - Explain Diffusion Networks
+    Instead of using two models, a diffusion network takes a set of random noise and tries to 
+    predict what that an image must have looked like before noise was added to it.
+    It is trained by adding noise to images from the target dataset.
+    But at runtime it is given completely random noise which it uses to make completely new images.
+    It has been the more popular type of model for image generation in recent years. So I thought it would be good to use it.
+
+
+
+4. Methodology
+    - Describe the approach you will take to implement the Pong RL-GAN
+    We will start by making the Pong agent and testing it playing Pong.
+
+    Then we will make both of the generator models (the GAN and the DIffusion model).
+    The generators will need to output a displayed Pong image, rewards, and button inputs to go alongside it.
+    The generators need to give button inputs because the agent will not be able to interact with the generator models' data.
+    The agent will train on the data from the generators, as well as its own real games of Pong.
+    The agent will need to take in a Pong image, rewards, and output its own button inputs to send to the Pong environment in OpenAI's Gym. 
+
+    - Explain the RL algorithm and GAN architecture you will use
+    We will use a fully connected neural network for the Pong agent.
+    GAN will use a convolutional neural network from a GAN tutorial ipynb.
+    Diffusion will use a diffusion model from a Diffusion tutorial.
+    All models will be implemented using pytorch or tensorflow but I havent decided which yet.
+
+5. Implementation
+    - Detail the steps involved in implementing the Pong RL-GAN
+    - Discuss the programming languages, frameworks, and libraries you will use
+
+6. Evaluation
+    - Explain how you will evaluate the performance of the Pong RL-GAN
+    - Define the metrics and criteria for success
+
+7. Results and Analysis
+    - Present the results obtained from the Pong RL-GAN implementation
+    - Analyze and interpret the results
+
+8. Conclusion
+    - Summarize the project and its outcomes
+    - Discuss any limitations or future improvements
+
+9. References
+    - List any references or resources used in the project
