@@ -102,3 +102,10 @@ Discuss any limitations or future improvements
 
 ## 9. References
 List any references or resources used in the project
+- About diffusion networks
+    - https://www.assemblyai.com/blog/diffusion-models-for-machine-learning-introduction/ (mathy explanation along with code walk through) <- very nice
+        - https://kikaben.com/up-sampling-with-transposed-convolution/ (what is up-convolution)
+        - https://www.analyticsvidhya.com/blog/2022/10/image-segmentation-with-u-net/ (Unet?)
+    - https://github.com/lucidrains/denoising-diffusion-pytorch (pytorch implementation)(has links to youtube videos along with lots more info)
+    - https://github.com/hojonathanho/diffusion (tensorflow implemenation)
+    
