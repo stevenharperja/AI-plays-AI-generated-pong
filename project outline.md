@@ -66,14 +66,19 @@ All models will be implemented using PyTorch or TensorFlow, but I haven't decide
 ### Steps
 1.
 Create an agent model using TensorFlow or Pytorch and have it play pong using OpenAI Gym.
+    i.
 2.
 Create graph functions to see how well the model does as we train it.
+    i.
 3.
 Create a diffusion model from a prebuilt implementation. figure out how to implement the embeddings for controls and recurrent image generation.
+    i.
 4.
 Train the diffusion model using the same few games of pong.
+    i.
 5.
 Hook up the agent to play with the diffusion model as if it were OpenAI Gym.
+    i.
 
 
 ### Programming Languages, Frameworks, and Libraries
