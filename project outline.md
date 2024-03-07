@@ -51,6 +51,8 @@ It has been a popular type of model for image generation in recent years. So I t
 We will start by making the Pong agent and testing it playing Pong. 
 Then we will make the diffusion model. 
 The diffusion model will be trained on the Pong scenes and will act as a recurrent neural network, taking the previous image it generated as an embedding for the next image. 
+The embedding which trackes image history will use exponential decay to record information from the last few frames.:
+    To do it, divide the previous embedding by 2, and add the last image we produced to it (with a max value of 1 in the matrix). this will allow the model to have information beyond just the last frame
 The diffusion model will need to output a displayed Pong image and rewards to go alongside it. 
 The diffusion model will take an additional embedding conveying what buttons are being pushed in each image. The agent can then supply the button presses or they can be picked randomly. 
 The agent will train on the data from the diffusion model, as well as its own real games of Pong. 
