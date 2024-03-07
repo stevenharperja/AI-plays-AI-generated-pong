@@ -118,6 +118,9 @@ List any references or resources used in the project
         - https://kikaben.com/up-sampling-with-transposed-convolution/ (what is up-convolution)
         - https://www.analyticsvidhya.com/blog/2022/10/image-segmentation-with-u-net/ (Unet?)
     - https://github.com/lucidrains/denoising-diffusion-pytorch (pytorch implementation)(has links to youtube videos along with lots more info) <- very nice
+        - https://www.youtube.com/watch?v=344w5h24-h8 (diffusion overview)
+            - https://arxiv.org/abs/2112.10741 (text embedding)
+            - https://huggingface.co/spaces/valhalla/glide-text2im (text embedding)
     - https://github.com/hojonathanho/diffusion (tensorflow implemenation)
     - https://medium.com/@kemalpiro/step-by-step-visual-introduction-to-diffusion-models-235942d2f15c (more info on Diffusion models)
 - Pong RL
