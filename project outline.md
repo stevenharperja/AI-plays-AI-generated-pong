@@ -74,7 +74,10 @@ Create graph functions to see how well the model does as we train it.
     i.
 3.
 Create a diffusion model from a prebuilt implementation. figure out how to implement the embeddings for controls and recurrent image generation.
-    i.
+    i. 
+    notes:
+    use pytorch implementation?
+    throw embeddings as diffusion input?
 4.
 Train the diffusion model using the same few games of pong.
     i.
