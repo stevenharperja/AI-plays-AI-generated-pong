@@ -142,4 +142,6 @@ List any references or resources used in the project
     -https://m.youtube.com/watch?v=NhdzGfB1q74 (U-net)
 - Pong RL
     - http://karpathy.github.io/2016/05/31/rl/ (full code implementation of Pong AI)
+- PyTorch
+    - https://pytorch.org/tutorials/beginner/basics/intro.html (beginner tutorial)
     
