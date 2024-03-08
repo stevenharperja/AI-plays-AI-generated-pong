@@ -68,22 +68,35 @@ All models will be implemented using PyTorch or TensorFlow, but I haven't decide
 ### Steps
 1.
 Create an agent model using TensorFlow or Pytorch and have it play pong using OpenAI Gym.
-    i.
+    i. Use a convolutional layer followed by 2 fully connected layers, output a positive or negative number for up/down on the controller.
+        a. Theres not much particular thought behind this architecture its just off the top of my head.
 2.
 Create graph functions to see how well the model does as we train it.
-    i.
+    i. Use seaborn 
 3.
 Create a diffusion model from a prebuilt implementation. figure out how to implement the embeddings for controls and recurrent image generation.
     i. 
     notes:
     use pytorch implementation?
     throw embeddings as diffusion input?
+    ii. Embeddings
+        a. Instead of gaussian noise put the previous frame + the input. or maybe concatinate?
+        b. Show controller input by adding a +1 or -1 to the whole input image.
+    iii. Structure
+        a. Run the model as a recurrent neural net, putting its output frames into itself as input frames.
+        b. Use the distance from each sequential frame of pong with the same controller inputs, as the error. 
+        c. The model will need to output rewards for the agent as well. 
+            i. take the embedding created in the middle of the U-net, and feed it into some layers which outputs a +1, 0, or -1
 4.
 Train the diffusion model using the same few games of pong.
-    i.
+    i. Recurrency
+        a. Use the distance from each sequential frame of pong with the same controller inputs, as the error. 
+    ii. How much training data is needed?
+        a. no idea. but I'll try to use as little as possible, but we can compare how much is needed.
+    iii. Use transfer learning?
 5.
 Hook up the agent to play with the diffusion model as if it were OpenAI Gym.
-    i.
+    i. The diffusion model will need to be able to generate a new frame when given a new input from the agent.
 
 
 ### Programming Languages, Frameworks, and Libraries
