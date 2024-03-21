@@ -143,6 +143,7 @@ List any references or resources used in the project
 - Pong RL
     - http://karpathy.github.io/2016/05/31/rl/ (full code implementation of Pong AI)
     - https://huggingface.co/blog/deep-rl-pg (policy gradient implementation in PyTorch)
+    - https://colab.research.google.com/github/huggingface/deep-rl-class/blob/master/notebooks/unit4/unit4.ipynb#scrollTo=gfGJNZBUP7Vn (notebook file with policy model introduction)
 - PyTorch
     - https://pytorch.org/tutorials/beginner/basics/intro.html (beginner tutorial)
     
