@@ -2,6 +2,8 @@
 
 ## 1. Introduction
 ### Overview
+TLDR: Make a fake version of pong using an image generator network's output. Run an AI agent on that fake pong.
+
 This project is to test how well an image generating model can help an AI actor play Pong in as few sessions of real Pong as possible.
  
 Keywords: Few-shot Learning, Diffusion Networks, Reinforcement Learning
