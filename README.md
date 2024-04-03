@@ -1,4 +1,4 @@
-# Project Outline - Pong RL-Diffusion
+# Project Outline - AI Plays: AI-Generated Pong
 
 ## 1. Introduction
 ### Overview
@@ -115,7 +115,7 @@ Even if the diffusion model ends up taking longer to run than an instance of Pon
 
 ## 7. Results and Analysis
 ### Results
-Present the results obtained from the Pong RL-Diffusion implementation
+Present the results obtained
 
 ### Analysis
 Analyze and interpret the results
