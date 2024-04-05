@@ -150,6 +150,9 @@ List any references or resources used in the project
     - https://pytorch.org/tutorials/beginner/basics/intro.html (beginner tutorial)
 - Video generation model
     - https://blog.marvik.ai/2024/01/30/diffusion-models-for-video-generation/ (overview of recent video generation models)
+        - https://paperswithcode.com/method/vision-transformer (what is it?)
+        - https://doubiiu.github.io/projects/Make-Your-Video/ (might use)
+    - https://machine-learning-made-simple.medium.com/what-are-the-different-types-of-transformers-in-ai-5085275664e8 (Whats an autoregressive transformer?)
 
 - Unused:
     - https://video-diffusion.github.io/ (they use an approach which requires processing set amounts of frames. which probably doesnt work here)

@@ -1,9 +1,20 @@
 ## Project:  
-  
-A sequential recurrent diffusion model likely will do worse than a tranformer based approach. 
-Those probably already exist, lets research,
+   
+A sequential recurrent diffusion model likely will do worse than a tranformer based approach.   
+Those probably already exist, lets research,  
 What video model should be used?  
-  
+Maybe I should use a window approach for what the transformer sees, since i dont want to use lots of hardware.  
+I want "auto-regressive extension" <- From what I understand that means feeding it through a transformer  
+In place of text input embeddings, use button presses.  
+   
+
+Since pong is so simple you could make a state graph of it by hand. you probably could even just use a one or two layer fully connected network that takes the last frame and outputs the next and get it done easily.
+However, this wouldn't be extensible to future work or other games, so i want to try for an actual diffusion architecture.
   
 ## Conceptual:  
+
+https://blog.marvik.ai/2024/01/30/diffusion-models-for-video-generation/
 What is self attention?  
+whats a visual transformer?
+what is latent diffusion?
+what is auto regressive transformer? this looks very useful for the project
