@@ -148,4 +148,9 @@ List any references or resources used in the project
     - https://colab.research.google.com/github/huggingface/deep-rl-class/blob/master/notebooks/unit4/unit4.ipynb#scrollTo=gfGJNZBUP7Vn (notebook file with policy model introduction)
 - PyTorch
     - https://pytorch.org/tutorials/beginner/basics/intro.html (beginner tutorial)
+- Video generation model
+    - https://blog.marvik.ai/2024/01/30/diffusion-models-for-video-generation/ (overview of recent video generation models)
+
+- Unused:
+    - https://video-diffusion.github.io/ (they use an approach which requires processing set amounts of frames. which probably doesnt work here)
     
