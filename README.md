@@ -141,7 +141,8 @@ List any references or resources used in the project
             - https://huggingface.co/spaces/valhalla/glide-text2im (text embedding)
     - https://github.com/hojonathanho/diffusion (tensorflow implemenation)
     - https://medium.com/@kemalpiro/step-by-step-visual-introduction-to-diffusion-models-235942d2f15c (more info on Diffusion models)
-    -https://m.youtube.com/watch?v=NhdzGfB1q74 (U-net)
+    - https://m.youtube.com/watch?v=NhdzGfB1q74 (U-net)
+    - https://keras.io/examples/generative/ddim/ (more explanation on ddim)
 - Pong RL
     - http://karpathy.github.io/2016/05/31/rl/ (full code implementation of Pong AI)
     - https://huggingface.co/blog/deep-rl-pg (policy gradient implementation in PyTorch)
