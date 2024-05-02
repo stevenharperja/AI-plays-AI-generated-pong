@@ -158,8 +158,10 @@ List any references or resources used in the project
 - Unused:
     - https://video-diffusion.github.io/ (they use an approach which requires processing set amounts of frames. which probably doesnt work here)
     
-- Embedder model 
+- Embedder model implementation
     - https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html (code)
-- Generator model 
+- diffusion model implementation
     - https://github.com/explainingai-code/StableDiffusion-PyTorch (potential explanation of how to do embeddings for diffusion models?)
-    - https://wandb.ai/capecape/train_sd/reports/How-To-Train-a-Conditional-Diffusion-Model-From-Scratch--VmlldzoyNzIzNTQ1 (paper explaining conditional diffusion models)
+    - https://wandb.ai/capecape/train_sd/reports/How-To-Train-a-Conditional-Diffusion-Model-From-Scratch--VmlldzoyNzIzNTQ1 (paper explaining conditional diffusion models VERY GOOD)
+        - https://github.com/tcapelle/Diffusion-Models-pytorch/blob/main/modules.py (code for the modules used in the nn)
+            - https://www.baeldung.com/cs/gelu-activation-function (Gelu explanation)
