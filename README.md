@@ -162,3 +162,4 @@ List any references or resources used in the project
     - https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html (code)
 - Generator model 
     - https://github.com/explainingai-code/StableDiffusion-PyTorch (potential explanation of how to do embeddings for diffusion models?)
+    - https://wandb.ai/capecape/train_sd/reports/How-To-Train-a-Conditional-Diffusion-Model-From-Scratch--VmlldzoyNzIzNTQ1 (paper explaining conditional diffusion models)
