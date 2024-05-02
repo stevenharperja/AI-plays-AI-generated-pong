@@ -158,3 +158,7 @@ List any references or resources used in the project
 - Unused:
     - https://video-diffusion.github.io/ (they use an approach which requires processing set amounts of frames. which probably doesnt work here)
     
+- Embedder model 
+    - https://pytorch.org/vision/0.18/models/generated/torchvision.models.resnet50.html (code)
+- Generator model 
+    - https://github.com/explainingai-code/StableDiffusion-PyTorch (potential explanation of how to do embeddings for diffusion models?)
