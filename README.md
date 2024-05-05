@@ -5,8 +5,6 @@
 
 TLDR: Make a fake version of Pong using an image generator model's output. Run an AI agent on that fake Pong.
 
-This project is to create an image generating model that simulates a virtual environment of Pong. This environment can then be used to train an AI agent to play Pong, without necessarily having the agent play real Pong. 
-
 Reinforcement learning has a difficult problem where it requires many run-throughs of training to
 produce a good model. For robotics applications, or for virtual environments such as video games which
 are computationally intensive to run, training a model on real data can be slow and expensive.  
