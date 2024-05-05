@@ -121,7 +121,7 @@ The goals of this project are to demonstrate how well this technique works to im
 
 
 
-
+<!-- 
 ## 4. Methodology
 ### Approach
 We will start by making the Pong agent and testing it playing Pong. 
@@ -138,7 +138,7 @@ The agent will just see the difference between one frame and the next, and diffu
 ### RL Algorithm and Diffusion Model Architecture
 We will use a fully connected neural network for the Pong agent. Or maybe I'll find some more complex one and use that.  
 The diffusion model will use a diffusion model from a diffusion tutorial.  
-All models will be implemented using PyTorch or TensorFlow, but I haven't decided which yet.  
+All models will be implemented using PyTorch or TensorFlow, but I haven't decided which yet.   -->
 
 
 
