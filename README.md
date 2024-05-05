@@ -25,19 +25,9 @@ generating each image. Training data is easy to produce, as only a few minutes o
 library produces tens of thousands of images. The main difficulty lies in determining the appropriate architecture. Video generation is still being researched, with relevant papers being published within the last 2 or so years.  
   
 I’m guessing this technology, or something like it, likely already exists. But I haven’t heard of someone
-doing it for video games and I thought it would be fun
+doing it for video games and I thought it would be fun to implement myself
 
 
-It involves two models:
-- The Generator
-    - A diffusion-style network
-    - Input: Previous Pong images, and What buttons are being pressed.
-    - Output: A new Pong image, What reward to generate for training the agent, and a signal for whether the virtual Pong game has finished 
-- The Agent
-    - A simple fully-connected network
-    - Input: A Pong image
-    - Output: Decision of what buttons to press
- 
 Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement Learning
 
 ### Process
@@ -108,7 +98,15 @@ All models will be implemented using PyTorch or TensorFlow, but I haven't decide
 
 ## 5. Implementation
 ### Steps
-
+It involves two models:
+- The Generator
+    - A diffusion-style network
+    - Input: Previous Pong images, and What buttons are being pressed.
+    - Output: A new Pong image, What reward to generate for training the agent, and a signal for whether the virtual Pong game has finished 
+- The Agent
+    - A simple fully-connected network
+    - Input: A Pong image
+    - Output: Decision of what buttons to press
 
     - This includes screen data, button inputs, whether the game is over, and whether the player has scored/lost a point
     - The data collected is the same input/output as the Gym library Pong environment uses
