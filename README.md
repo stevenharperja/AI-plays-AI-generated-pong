@@ -23,31 +23,7 @@ generating each image.
 
 Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement Learning
 
-### Project plan
-1. Collect input and output data of a pong game at each frame and save that data. (implemented)
-2. Train the Generator model on that data. (currently implementing)
-3. Run the Generator model to generate new frames of pong, using the Agent model's decisions as input data for the Generator
-4. Train the Agent model on the frames generated as if it were normal pong.
-
-
-
-### Progress Status
-- A simple agent has been created,
-- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it to verify that data can be processed.
-- Next steps are to create a better generator network by connecting a convolutional classification network to a diffusion network.
-
-<!-- ## 2. Goals and Objectives
-### Why I chose this project
-- It demonstrates a technique that can be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
-    - Many p
-- Similar techniques are applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.  
-- To learn more about diffusion models and Reinforcement learning techniques by doing this project.
-### Project Goals
-The goals of this project are to demonstrate how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots. -->
-
-
-
-## 3. Background
+## 2. Background
 ### Pong
 Pong is a two-dimensional sports game that simulates table tennis.  
 The player controls an in-game paddle by moving it vertically across the left or right side of the screen.  
@@ -71,38 +47,40 @@ It is trained by adding noise to images from the target dataset.
 But at runtime, it is given completely random noise which it uses to make completely new images.
 It has been a popular type of model for image generation in recent years. So I thought it would be good to use it.
 
-## 4. Methodology
-### Approach
-We will start by making the Pong agent and testing it playing Pong. 
-Then we will make the diffusion model. 
-The diffusion model will be trained on the Pong scenes and will act as a recurrent neural network, taking the previous image it generated as an embedding for the next image. 
-The embedding which trackes image history will use exponential decay to record information from the last few frames.:
-    To do it, divide the previous embedding by 2, and add the last image we produced to it (with a max value of 1 in the matrix). this will allow the model to have information beyond just the last frame
-The diffusion model will need to output a displayed Pong image and rewards to go alongside it. 
-The diffusion model will take an additional embedding conveying what buttons are being pushed in each image. The agent can then supply the button presses or they can be picked randomly. 
-The agent will train on the data from the diffusion model, as well as its own real games of Pong. 
-The agent will need to take in a Pong image, rewards, and output its own button inputs to send to the Pong environment in OpenAI's Gym. 
-The agent will just see the difference between one frame and the next, and diffusion will only create the difference between one frame and the next like in http://karpathy.github.io/2016/05/31/rl/ 
+## 3. Implementation
 
-### RL Algorithm and Diffusion Model Architecture
-We will use a fully connected neural network for the Pong agent. Or maybe I'll find some more complex one and use that.  
-The diffusion model will use a diffusion model from a diffusion tutorial.  
-All models will be implemented using PyTorch or TensorFlow, but I haven't decided which yet.  
-
-## 5. Implementation
-### Steps
-It involves two models:
-- The Generator
-    - A diffusion-style network
-    - Input: Previous Pong images, and What buttons are being pressed.
-    - Output: A new Pong image, What reward to generate for training the agent, and a signal for whether the virtual Pong game has finished 
-- The Agent
-    - A simple fully-connected network
-    - Input: A Pong image
-    - Output: Decision of what buttons to press
-
+### Project plan
+1. Collect input and output data of a pong game at each frame and save that data. (implemented)
     - This includes screen data, button inputs, whether the game is over, and whether the player has scored/lost a point
     - The data collected is the same input/output as the Gym library Pong environment uses
+    - Pre-format that data in a way the Generator network can use.
+2. Train the Generator model on that data. (currently implementing)
+    - Find image classifier and image generator models on HuggingFace that were pre-trained.
+    - Retrain those models to make Pong images 
+3. Run the Generator model to generate new frames of pong, using the Agent model's decisions as input data for the Generator
+    - Additionally I want to make the virtual pong human-playable on the screen.
+4. Train the Agent model on the frames generated as if it were normal pong.
+    - Train the model in between games
+
+### Progress Status
+- A simple agent has been created,
+- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it to verify that data can be processed.
+- Next steps are to create a better generator network by connecting a convolutional classification network to a diffusion network.
+
+
+### Architecture
+The two models:
+- The Generator
+    - An Encoder-Decoder style network
+        - Encoder: An image classifier (in the future I want it to use something like a transformer)
+        - Decoder: A diffusion network
+    - Input: Previous Pong images, and What buttons are being pressed.
+    - Output: A new Pong image, What reward to generate for training the agent, and A signal for whether the virtual Pong game has finished 
+- The Agent
+    - A shallow fully-connected network
+    - Input: A Pong image
+    - Output: Decision of what buttons to press
+        
 1.
 Create an agent model using TensorFlow or Pytorch and have it play pong using OpenAI Gym.
     i. Use a convolutional layer followed by 2 fully connected layers, output a positive or negative number for up/down on the controller.
@@ -139,6 +117,42 @@ Hook up the agent to play with the diffusion model as if it were OpenAI Gym.
 
 ### Programming Languages, Frameworks, and Libraries
 Python, OpenAI Gym, TensorFlow or PyTorch.
+
+
+
+
+<!-- ## 2. Goals and Objectives
+### Why I chose this project
+- It demonstrates a technique that can be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
+    - Many p
+- Similar techniques are applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.  
+- To learn more about diffusion models and Reinforcement learning techniques by doing this project.
+### Project Goals
+The goals of this project are to demonstrate how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots. -->
+
+
+
+
+
+## 4. Methodology
+### Approach
+We will start by making the Pong agent and testing it playing Pong. 
+Then we will make the diffusion model. 
+The diffusion model will be trained on the Pong scenes and will act as a recurrent neural network, taking the previous image it generated as an embedding for the next image. 
+The embedding which trackes image history will use exponential decay to record information from the last few frames.:
+    To do it, divide the previous embedding by 2, and add the last image we produced to it (with a max value of 1 in the matrix). this will allow the model to have information beyond just the last frame
+The diffusion model will need to output a displayed Pong image and rewards to go alongside it. 
+The diffusion model will take an additional embedding conveying what buttons are being pushed in each image. The agent can then supply the button presses or they can be picked randomly. 
+The agent will train on the data from the diffusion model, as well as its own real games of Pong. 
+The agent will need to take in a Pong image, rewards, and output its own button inputs to send to the Pong environment in OpenAI's Gym. 
+The agent will just see the difference between one frame and the next, and diffusion will only create the difference between one frame and the next like in http://karpathy.github.io/2016/05/31/rl/ 
+
+### RL Algorithm and Diffusion Model Architecture
+We will use a fully connected neural network for the Pong agent. Or maybe I'll find some more complex one and use that.  
+The diffusion model will use a diffusion model from a diffusion tutorial.  
+All models will be implemented using PyTorch or TensorFlow, but I haven't decided which yet.  
+
+
 
 ## 6. Evaluation
 ### Performance Evaluation
