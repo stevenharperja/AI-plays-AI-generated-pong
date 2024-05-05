@@ -64,8 +64,8 @@ It has been a popular type of model for image generation in recent years. So I t
     - Train the model in between games
 
 ### Progress Status
-- A simple agent has been created,
-- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it to verify that data can be processed.
+- A simple agent has been created, (see agent-testing.ipynb)
+- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it to verify that data can be processed. (see pong-data-generator.ipynb and trivial-pong.ipynb)
 - Next steps are to create a better generator network by connecting a convolutional classification network to a diffusion network.
 
 
