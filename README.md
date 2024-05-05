@@ -21,6 +21,13 @@ generating each image.
 
 Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement Learning
 
+### Progress Status
+- A simple agent has been created, (see [agent-testing.ipynb](https://github.com/stevenharperja/AI-plays-AI-generated-pong/blob/main/agent-testing.ipynb))
+- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it to verify that data can be processed. (see [pong-data-generator.ipynb](https://github.com/stevenharperja/AI-plays-AI-generated-pong/blob/main/pong-data-generator.ipynb) and [trivial-pong.ipynb](https://github.com/stevenharperja/AI-plays-AI-generated-pong/blob/main/trivial-pong.ipynb))
+- Next steps are to create a better generator network by connecting a convolutional classification network to a diffusion network.
+
+
+
 ## 2. Background
 ### Pong
 Pong is a two-dimensional sports game that simulates table tennis.  
@@ -60,11 +67,6 @@ It has been a popular type of model for image generation in recent years. So I t
     - Additionally I want to make the virtual pong human-playable on the screen.
 4. Train the Agent model on the generated frames as if it were normal pong.
     - Train the model in-between games
-
-### Progress Status
-- A simple agent has been created, (see [agent-testing.ipynb](https://github.com/stevenharperja/AI-plays-AI-generated-pong/blob/main/agent-testing.ipynb))
-- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it to verify that data can be processed. (see [pong-data-generator.ipynb](https://github.com/stevenharperja/AI-plays-AI-generated-pong/blob/main/pong-data-generator.ipynb) and [trivial-pong.ipynb](https://github.com/stevenharperja/AI-plays-AI-generated-pong/blob/main/trivial-pong.ipynb))
-- Next steps are to create a better generator network by connecting a convolutional classification network to a diffusion network.
 
 
 ### Architecture
