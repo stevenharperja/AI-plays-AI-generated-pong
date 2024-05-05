@@ -21,10 +21,9 @@ The other model, called the Generator, tries to emulate Pong. It acts as a video
 producing images of pong in sequence and takes the Agent's output as an additional input for
 generating each image. 
 
-
 Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement Learning
 
-### Project process
+### Project plan
 1. Collect input and output data of a pong game at each frame and save that data. (implemented)
 2. Train the Generator model on that data. (currently implementing)
 3. Run the Generator model to generate new frames of pong, using the Agent model's decisions as input data for the Generator
@@ -34,8 +33,8 @@ Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement
 
 ### Progress Status
 - A simple agent has been created,
-- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it.
-Next steps are to create a better generator network by connecting a convolutional classification network's feature layer output as embeddings for a diffusion network.
+- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it to verify that data can be processed.
+- Next steps are to create a better generator network by connecting a convolutional classification network to a diffusion network.
 
 <!-- ## 2. Goals and Objectives
 ### Why I chose this project
