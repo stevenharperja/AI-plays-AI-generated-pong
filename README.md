@@ -9,23 +9,23 @@ This project is to create an image generating model that simulates a virtual env
 
 Reinforcement learning has a difficult problem where it requires many run-throughs of training to
 produce a good model. For robotics applications, or for virtual environments such as video games which
-are computationally intensive to run, training a model on real data can be slow and expensive. If few-
-shot solutions can be made, it would help a lot. To this end, people have used simulated environments
-such as [physics engines](https://unity.com/solutions/automotive-transportation-manufacturing/robotics), or have [used videos of the actions they want the model to copy](https://openai.com/index/vpt). This
-project uses a sort of mix of these two techniques: using a generative network to create video
-simulating an environment.
-The project itself involves two machine learning models.
-One model, called the Agent, will play pong. It will take a full black and white image display of pong as
-an input, and produce a single output which will decide whether to move the paddle up or down. A
-reward value will be used to train the model between games of Pong. Example code for this kind of
-model can easily be found online. And the library OpenAI Gym is already built to provide an easy training
-environment.
-The other model, called the Generator, will try to emulate Pong. It would act as a video generator,
-producing images of pong in sequence, and would take the Agent’s output as an additional input for
-generating each image. Training data is easy to produce, since only a few minutes of Pong using the Gym
-library produces tens of thousands of images. The main difficulty is in what architecture would be
-appropriate. Video generation is still being researched, with relevant papers being published within only
-in the last 2 or so years.
+are computationally intensive to run, training a model on real data can be slow and expensive.  
+If few-shot solutions can be made, it would help a lot. To this end, people have used simulated environments
+such as [physics engines](https://unity.com/solutions/automotive-transportation-manufacturing/robotics), or have [used videos of the actions they want the model to copy](https://openai.com/index/vpt). This project uses a sort of mix of these two techniques: using a generative network to create video
+simulating an environment.  
+  
+The project itself involves two machine learning models.  
+  
+One model, called the Agent, plays pong. It takes a full black and white image display of pong as
+an input and produces a single output that decides whether to move the paddle up or down. Reward values are used to train the model between games of Pong. Example code for this kind of
+model can easily be found online, and the library OpenAI Gym is already built to provide an easy training
+environment.  
+  
+The other model, called the Generator, tries to emulate Pong. It acts as a video generator,
+producing images of pong in sequence and takes the Agent's output as an additional input for
+generating each image. Training data is easy to produce, as only a few minutes of Pong using the Gym
+library produces tens of thousands of images. The main difficulty lies in determining the appropriate architecture. Video generation is still being researched, with relevant papers being published within the last 2 or so years.  
+  
 I’m guessing this technology, or something like it, likely already exists. But I haven’t heard of someone
 doing it for video games and I thought it would be fun
 
