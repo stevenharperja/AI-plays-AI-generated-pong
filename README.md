@@ -13,6 +13,9 @@ We start by having an AI agent play a few games of pong. Afterward, we use the s
 This diffusion model then creates scenes of "virtual pong" which the AI agent then trains on.
 We repeat this a number of times and compare the results of the training vs an AI agent which only trained on "real pong".
 
+### Progress Status
+A simple agent has been created, a data pipeline has been made for the generator network and a dummy generator network has been tested. Next steps are to create a generator network by connecting a convolutional classification network's feature layer output to be used as embeddings for a diffusion network.
+
 ## 2. Goals and Objectives
 ### Project Goals
 The goals of this project are to show how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots.
@@ -62,9 +65,9 @@ The agent will need to take in a Pong image, rewards, and output its own button 
 The agent will just see the difference between one frame and the next, and diffusion will only create the difference between one frame and the next like in http://karpathy.github.io/2016/05/31/rl/ 
 
 ### RL Algorithm and Diffusion Model Architecture
-We will use a fully connected neural network for the Pong agent. Or maybe I'll find some more complex one and use that.
-The diffusion model will use a diffusion model from a diffusion tutorial.
-All models will be implemented using PyTorch or TensorFlow, but I haven't decided which yet.
+We will use a fully connected neural network for the Pong agent. Or maybe I'll find some more complex one and use that.  
+The diffusion model will use a diffusion model from a diffusion tutorial.  
+All models will be implemented using PyTorch or TensorFlow, but I haven't decided which yet.  
 
 ## 5. Implementation
 ### Steps
