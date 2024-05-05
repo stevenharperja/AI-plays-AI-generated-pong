@@ -15,22 +15,16 @@ simulating an environment.
 The project itself involves two machine learning models.  
   
 One model, called the Agent, plays pong. It takes a full black and white image display of pong as
-an input and produces a single output that decides whether to move the paddle up or down. Reward values are used to train the model between games of Pong. Example code for this kind of
-model can easily be found online, and the library OpenAI Gym is already built to provide an easy training
-environment.  
+an input and produces a single output that decides whether to move the paddle up or down. Reward values are used to train the model between games of Pong. 
   
 The other model, called the Generator, tries to emulate Pong. It acts as a video generator,
 producing images of pong in sequence and takes the Agent's output as an additional input for
-generating each image. Training data is easy to produce, as only a few minutes of Pong using the Gym
-library produces tens of thousands of images. The main difficulty lies in determining the appropriate architecture. Video generation is still being researched, with relevant papers being published within the last 2 or so years.  
-  
-I’m guessing this technology, or something like it, likely already exists. But I haven’t heard of someone
-doing it for video games and I thought it would be fun to implement myself
+generating each image. 
 
 
 Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement Learning
 
-### Process
+### Project process
 1. Collect input and output data of a pong game at each frame and save that data. (implemented)
 2. Train the Generator model on that data. (currently implementing)
 3. Run the Generator model to generate new frames of pong, using the Agent model's decisions as input data for the Generator
@@ -43,14 +37,14 @@ Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement
 - A data pipeline has been made for the generator network, and a dummy generator network has been tested on it.
 Next steps are to create a better generator network by connecting a convolutional classification network's feature layer output as embeddings for a diffusion network.
 
-## 2. Goals and Objectives
+<!-- ## 2. Goals and Objectives
 ### Why I chose this project
 - It demonstrates a technique that can be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
     - Many p
 - Similar techniques are applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.  
 - To learn more about diffusion models and Reinforcement learning techniques by doing this project.
 ### Project Goals
-The goals of this project are to demonstrate how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots.
+The goals of this project are to demonstrate how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots. -->
 
 
 
