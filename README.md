@@ -60,7 +60,7 @@ It has been a popular type of model for image generation in recent years. So I t
     - From a code perspective, I should be able to treat it like a OpenAI Gym Environment class 
 3. Run the Generator model to generate new frames of pong, using the Agent model's decisions as input data for the Generator
     - Additionally I want to make the virtual pong human-playable on the screen.
-4. Train the Agent model on the frames generated as if it were normal pong.
+4. Train the Agent model on the generated frames as if it were normal pong.
     - Train the model in between games
 
 ### Progress Status
