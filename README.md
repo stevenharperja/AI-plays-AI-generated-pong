@@ -57,6 +57,7 @@ It has been a popular type of model for image generation in recent years. So I t
 2. Train the Generator model on that data. (currently implementing)
     - Find image classifier and image generator models on HuggingFace that were pre-trained.
     - Retrain those models to make Pong images 
+    - From a code perspective, I should be able to treat it like a OpenAI Gym Environment class 
 3. Run the Generator model to generate new frames of pong, using the Agent model's decisions as input data for the Generator
     - Additionally I want to make the virtual pong human-playable on the screen.
 4. Train the Agent model on the frames generated as if it were normal pong.
@@ -81,14 +82,11 @@ The two models:
     - Input: A Pong image
     - Output: Decision of what buttons to press
         
-1.
+<!-- 1.
 Create an agent model using TensorFlow or Pytorch and have it play pong using OpenAI Gym.
     i. Use a convolutional layer followed by 2 fully connected layers, output a positive or negative number for up/down on the controller.
         a. Theres not much particular thought behind this architecture its just off the top of my head.
-        b. assign a +1 reward to the agent whenever it scores a point, and -1 reward when the opponent scores a point.
-2.
-Create graph functions to see how well the model does as we train it.
-    i. Use seaborn 
+        b. assign a +1 reward to the agent whenever it scores a point, and -1 reward when the opponent scores a point.  
 3.
 Create a diffusion model from a prebuilt implementation. figure out how to implement the embeddings for controls and recurrent image generation.
     i. 
@@ -102,17 +100,7 @@ Create a diffusion model from a prebuilt implementation. figure out how to imple
         a. Run the model as a recurrent neural net, putting its output frames into itself as input frames.
         b. Use the distance from each sequential frame of pong with the same controller inputs, as the error. 
         c. The model will need to output rewards for the agent as well. 
-            i. take the embedding created in the middle of the U-net, and feed it into some layers which outputs a +1, 0, or -1
-4.
-Train the diffusion model using the same few games of pong.
-    i. Recurrency
-        a. Use the distance from each sequential frame of pong with the same controller inputs, as the error. 
-    ii. How much training data is needed?
-        a. no idea. but I'll try to use as little as possible, but we can compare how much is needed.
-    iii. Use transfer learning?
-5.
-Hook up the agent to play with the diffusion model as if it were OpenAI Gym.
-    i. The diffusion model will need to be able to generate a new frame when given a new input from the agent.
+            i. take the embedding created in the middle of the U-net, and feed it into some layers which outputs a +1, 0, or -1 -->
 
 
 ### Programming Languages, Frameworks, and Libraries
@@ -154,14 +142,14 @@ All models will be implemented using PyTorch or TensorFlow, but I haven't decide
 
 
 
-## 6. Evaluation
+<!-- ## 6. Evaluation
 ### Performance Evaluation
 We will compare how many rounds of training it takes to create an agent on real Pong with the same average number of game wins as one trained on both the diffusion model and real Pong.
-We will also compare this with an agent trained by overfitting (training on game results multiple times without playing new games) on the same number of real pong games.
+We will also compare this with an agent trained by overfitting (training on game results multiple times without playing new games) on the same number of real pong games. -->
 
-### Metrics and Criteria for Success
+<!-- ### Metrics and Criteria for Success
 Making an agent model trained on both the diffusion model and real Pong which performs better than a model trained using the same amount of real Pong iterations but no diffusion model interactions.
-Even if the diffusion model ends up taking longer to run than an instance of Pong, it is still worthwhile because when this technique is extended to more difficult games or to real-life scenarios, running a diffusion model can be cheaper/faster than running that game or potentially losing a robot. 
+Even if the diffusion model ends up taking longer to run than an instance of Pong, it is still worthwhile because when this technique is extended to more difficult games or to real-life scenarios, running a diffusion model can be cheaper/faster than running that game or potentially losing a robot.  -->
 
 <!-- ## 7. Results and Analysis
 ### Results
