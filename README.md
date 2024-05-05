@@ -1,5 +1,3 @@
-# Project Outline - AI Plays: AI-Generated Pong
-
 ## 1. Introduction
 ### Overview
 
@@ -167,7 +165,7 @@ Discuss any limitations or future improvements
 
 The techniques used with both the Diffusion and AI agent likely don't let the models have a lot of "memory" of previous frames, so when extended to more complex environments it would be better to change the model architectures. The Diffusion model architecture should be changed away from a recurrent architecture in favor of something like a transformer. This would make it so the agent couldn't play in real time but i think there is likely some work around possible.  -->
 
-## 9. References
+## 4. References
 - About diffusion networks
     - https://www.assemblyai.com/blog/diffusion-models-for-machine-learning-introduction/ (mathy explanation along with code walk through) <- very nice
         - https://kikaben.com/up-sampling-with-transposed-convolution/ (what is up-convolution)
