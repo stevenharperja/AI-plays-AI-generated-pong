@@ -2,43 +2,57 @@
 
 ## 1. Introduction
 ### Overview
-TLDR: Make a fake version of pong using an image generator network's output. Run an AI agent on that fake pong.
 
-This project is to test how well an image generating model can help an AI actor play Pong in as few sessions of real Pong as possible.
+TLDR: Make a fake version of Pong using an image generator model's output. Run an AI agent on that fake Pong.
+
+This project is to create an image generating model that simulates a "virtual" environment to train an AI actor to play Pong. With the eventual goal of training the agent using as few episodes of real Pong as possible.
+
+It involves two models:
+- The Generator
+    - A diffusion-style network
+    - Input: Previous Pong images, and What buttons are being pressed.
+    - Output: A new Pong image, What reward to generate for training the agent, and a signal for whether the virtual Pong game has finished 
+- The Agent
+    - A simple fully-connected network
+    - Input: A Pong image
+    - Output: Decision of what buttons to press
  
-Keywords: Few-shot Learning, Diffusion Networks, Reinforcement Learning
+Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement Learning
 
 ### Process
-We start by having an AI agent play a few games of pong. Afterward, we use the screen data, input data, and reward data seen during those games to train a diffusion model.
-This diffusion model then creates scenes of "virtual pong" which the AI agent then trains on.
-We repeat this a number of times and compare the results of the training vs an AI agent which only trained on "real pong".
+1. Collect input and output data of a pong game at each frame and save that data. (implemented)
+2. Train the Generator model on that data. (currently implementing)
+3. Run the Generator model to generate new frames of pong, using the Agent model's decisions as input data for the Generator
+4. Train the Agent model on the frames generated as if it were normal pong.
+
+
 
 ### Progress Status
-A simple agent has been created, a data pipeline has been made for the generator network and a dummy generator network has been tested. Next steps are to create a generator network by connecting a convolutional classification network's feature layer output to be used as embeddings for a diffusion network.
+- A simple agent has been created,
+- A data pipeline has been made for the generator network, and a dummy generator network has been tested on it.
+Next steps are to create a better generator network by connecting a convolutional classification network's feature layer output as embeddings for a diffusion network.
 
 ## 2. Goals and Objectives
 ### Project Goals
 The goals of this project are to show how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots.
 
 ### Why I chose this project
-I hope to show a proof of concept that could be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
-This technique can be and already is applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.  
-I hope to learn more about diffusion models and Reinforcement learning techniques by doing this project.
+- To show a proof of concept that could be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
+- Similar techniques are applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.  
+- To learn more about diffusion models and Reinforcement learning techniques by doing this project.
 
 ## 3. Background
 ### Pong
-Pong is a two-dimensional sports game that simulates table tennis.
-The player controls an in-game paddle by moving it vertically across the left or right side of the screen.
-They can compete against another player controlling a second paddle on the opposing side.
-Players use the paddles to hit a ball back and forth.
-The goal is for each player to reach eleven points before the opponent;
-points are earned when one fails to return the ball to the other.
-[Wikipedia](https://en.wikipedia.org/wiki/Pong)  
+Pong is a two-dimensional sports game that simulates table tennis.  
+The player controls an in-game paddle by moving it vertically across the left or right side of the screen.  
+They can compete against another player controlling a second paddle on the opposing side.  
+Players use the paddles to hit a ball back and forth.  
+The goal is for each player to reach eleven points before the opponent;  
+points are earned when one fails to return the ball to the other.  
+[Wikipedia](https://en.wikipedia.org/wiki/Pong)   
 
-![Pong Game](https://upload.wikimedia.org/wikipedia/commons/6/62/Pong_Game_Test2.gif)
+![Gif of a Pong game](https://upload.wikimedia.org/wikipedia/commons/6/62/Pong_Game_Test2.gif)  
 
-We will be using Pong and assigning a +1 reward to the agent whenever it scores a point, and -1 reward when the opponent scores a point.
-We will use OpenAI's Gym library to do this.
 
 ### Reinforcement Learning (RL)
 Reinforcement learning is the general term used to describe using machine learning to make a model which deals with time-based situations while making decisions to navigate an environment.
@@ -71,10 +85,15 @@ All models will be implemented using PyTorch or TensorFlow, but I haven't decide
 
 ## 5. Implementation
 ### Steps
+
+
+    - This includes screen data, button inputs, whether the game is over, and whether the player has scored/lost a point
+    - The data collected is the same input/output as the Gym library Pong environment uses
 1.
 Create an agent model using TensorFlow or Pytorch and have it play pong using OpenAI Gym.
     i. Use a convolutional layer followed by 2 fully connected layers, output a positive or negative number for up/down on the controller.
         a. Theres not much particular thought behind this architecture its just off the top of my head.
+        b. assign a +1 reward to the agent whenever it scores a point, and -1 reward when the opponent scores a point.
 2.
 Create graph functions to see how well the model does as we train it.
     i. Use seaborn 
@@ -116,21 +135,21 @@ We will also compare this with an agent trained by overfitting (training on game
 Making an agent model trained on both the diffusion model and real Pong which performs better than a model trained using the same amount of real Pong iterations but no diffusion model interactions.
 Even if the diffusion model ends up taking longer to run than an instance of Pong, it is still worthwhile because when this technique is extended to more difficult games or to real-life scenarios, running a diffusion model can be cheaper/faster than running that game or potentially losing a robot. 
 
-## 7. Results and Analysis
+<!-- ## 7. Results and Analysis
 ### Results
 Present the results obtained
 
 ### Analysis
-Analyze and interpret the results
+Todo
 
 ## 8. Conclusion
 ### Summary
-Summarize the project and its outcomes
+Summarize the project and its outcomes -->
 
-### Limitations and Future Improvements
+<!-- ### Limitations and Future Improvements
 Discuss any limitations or future improvements
 
-The techniques used with both the Diffusion and AI agent likely don't let the models have a lot of "memory" of previous frames, so when extended to more complex environments it would be better to change the model architectures. The Diffusion model architecture should be changed away from a recurrent architecture in favor of something like a transformer. This would make it so the agent couldn't play in real time but i think there is likely some work around possible. 
+The techniques used with both the Diffusion and AI agent likely don't let the models have a lot of "memory" of previous frames, so when extended to more complex environments it would be better to change the model architectures. The Diffusion model architecture should be changed away from a recurrent architecture in favor of something like a transformer. This would make it so the agent couldn't play in real time but i think there is likely some work around possible.  -->
 
 ## 9. References
 List any references or resources used in the project
