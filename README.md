@@ -5,7 +5,7 @@
 
 TLDR: Make a fake version of Pong using an image generator model's output. Run an AI agent on that fake Pong.
 
-This project is to create an image generating model that simulates a "virtual" environment to train an AI actor to play Pong. With the eventual goal of training the agent using as few episodes of real Pong as possible.
+This project is to create an image generating model that simulates a virtual environment of Pong. This environment can then be used to train an AI agent to play Pong, without necessarily having the agent play real Pong. 
 
 It involves two models:
 - The Generator
@@ -33,13 +33,15 @@ Keywords: Few-shot Learning, Diffusion Networks, Video Generation, Reinforcement
 Next steps are to create a better generator network by connecting a convolutional classification network's feature layer output as embeddings for a diffusion network.
 
 ## 2. Goals and Objectives
-### Project Goals
-The goals of this project are to show how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots.
-
 ### Why I chose this project
-- To show a proof of concept that could be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
+- It demonstrates a technique that can be extended to reinforcement learning in other fields such as robotics or other more complex games than Pong.
+    - Many p
 - Similar techniques are applied in other forms of machine learning, and I want to demonstrate it with Pong because I like video games.  
 - To learn more about diffusion models and Reinforcement learning techniques by doing this project.
+### Project Goals
+The goals of this project are to demonstrate how well this technique works to improve few-shot learning, what the drawbacks are, and roughly how many training sessions are needed to compare to a model trained on many shots.
+
+
 
 ## 3. Background
 ### Pong
