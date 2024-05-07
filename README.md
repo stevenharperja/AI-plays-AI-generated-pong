@@ -165,3 +165,4 @@ List any references or resources used in the project
     - https://wandb.ai/capecape/train_sd/reports/How-To-Train-a-Conditional-Diffusion-Model-From-Scratch--VmlldzoyNzIzNTQ1 (paper explaining conditional diffusion models VERY GOOD)
         - https://github.com/tcapelle/Diffusion-Models-pytorch/blob/main/modules.py (code for the modules used in the nn)
             - https://www.baeldung.com/cs/gelu-activation-function (Gelu explanation)
+- https://nightcafe.studio/blogs/info/understanding-ai-model-checkpoints-a-simplified-guide (checkpoints)
