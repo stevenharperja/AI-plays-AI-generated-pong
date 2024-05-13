@@ -168,3 +168,6 @@ List any references or resources used in the project
             - https://www.baeldung.com/cs/gelu-activation-function (Gelu explanation)
     - https://github.com/VSehwag/minimal-diffusion (smaller model?)
 - https://nightcafe.studio/blogs/info/understanding-ai-model-checkpoints-a-simplified-guide (checkpoints)
+- Upscaler model
+    - https://paperswithcode.com/paper/image-super-resolution-using-deep
+    - https://github.com/yjn870/SRCNN-pytorch/blob/master/models.py
