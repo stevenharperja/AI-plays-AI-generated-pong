@@ -1,19 +1,25 @@
 # %%
+# General
 import numpy as np
-
-from collections import deque
-
-# PyTorch
 import torch
+import torchvision
 
 # Gym
 import gym
+
+# Saving images
+from collections import deque
+from os import listdir
+from os.path import isfile, join
+import os
+import sys
+import gc
 
 # %%
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # %%
-print(device)
+print("using:",device)
 
 # %%
 env_id = "ALE/Pong-v5"
@@ -22,11 +28,7 @@ env = gym.make(env_id,obs_type="grayscale",full_action_space=False)
 
 
 # %%
-from os import listdir
-from os.path import isfile, join
-import os
-import sys
-import gc
+
 
 class Saver():
     """
@@ -149,7 +151,7 @@ class Saver():
     
 
 # %%
-import torchvision
+
 save_dir = "diffusion_training_data/"
 imagenet_stats = ((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
 
