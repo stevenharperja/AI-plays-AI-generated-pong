@@ -1,23 +1,36 @@
-
+#general
 import torch
 import torch.nn as nn
 import numpy as np
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-save_dir = "diffusion_training_data/"
-
-from torchvision.models import resnet18
-
-torch.cuda.is_available()
-
-import conditional_diffusion.modules as modules
-from conditional_diffusion.ddpm_conditional import Diffusion as Diffusion
 import conditional_diffusion.utils as utils
 
-# %%
+# for model construction
+import conditional_diffusion.modules as modules 
+from torchvision.models import resnet18
+# for using the model
 from tqdm import tqdm 
+from conditional_diffusion.ddpm_conditional import Diffusion as Diffusion 
+# For dataloader
+from torch.utils.data import Dataset
+from os import listdir
+from os.path import isfile, join
+#for training
+import torch.optim as optim
+import torchvision
+from conditional_diffusion.ddpm_conditional import Diffusion
+from conditional_diffusion.ddpm_conditional import SummaryWriter
+from conditional_diffusion.ddpm_conditional import plot_images
+from conditional_diffusion.ddpm_conditional import save_images  
+from conditional_diffusion.modules import EMA
+import os
+import logging
+
+assert(torch.cuda.is_available(), "no cuda found! you cant run this model without a graphics card connected!")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+save_dir = "diffusion_training_data/"
+
+# %%
 class Net(nn.Module):
     def __init__(self, device, embedding_scale = 0):
         super(Net, self).__init__()
@@ -154,9 +167,6 @@ class Net(nn.Module):
 net = Net(device).to(device)
 
 # %%
-from torch.utils.data import Dataset
-from os import listdir
-from os.path import isfile, join
 
 class PongDataset(Dataset):
     def __init__(self, dir, device):
@@ -189,7 +199,7 @@ if __name__ == '__main__':
 #see https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 
 # define loss function and optimizer
-import torch.optim as optim
+
 
 small_img_criterion = nn.MSELoss()
 img_criterion = nn.MSELoss()
@@ -202,7 +212,7 @@ image_importance = 10 #hyperparameter for weighting how important the image is i
 
 
 # %%
-import torchvision
+
 
 beta_start=1e-4
 beta_end=0.02
@@ -222,17 +232,7 @@ big_transform = torchvision.transforms.Resize((224,224))
 
 
 # %%
-from conditional_diffusion.ddpm_conditional import Diffusion
-from conditional_diffusion.ddpm_conditional import SummaryWriter
-from conditional_diffusion.ddpm_conditional import plot_images
-from conditional_diffusion.ddpm_conditional import save_images  
-from conditional_diffusion.modules import EMA
-import os
-import logging
-import copy
-# while len(tqdm._instances) > 0:
-#     tqdm._instances.pop().close()
-from tqdm.notebook import tqdm 
+
 
 run_name = "Pong_Generator"
 
