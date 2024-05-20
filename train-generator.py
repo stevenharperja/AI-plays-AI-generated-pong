@@ -31,8 +31,10 @@ import argparse
 # pass argument to enable ema during training (costs more memory but may improve training)
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--use_ema", type=bool, default=False)
+parser.add_argument("-b", "--batch_size", type=int, default=8)
 args = parser.parse_args()
 use_ema = args.use_ema
+batch_size = args.batch_size
 
 assert(torch.cuda.is_available(), "no cuda found! you cant run this model without a graphics card connected!")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -198,7 +200,6 @@ class PongDataset(Dataset):
         return input, truth 
 
 # %%
-batch_size = 8
 trainset = PongDataset(save_dir,device)
 if __name__ == '__main__':
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=False)#, num_workers=1)
