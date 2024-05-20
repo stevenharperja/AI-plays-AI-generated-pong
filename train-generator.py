@@ -1,45 +1,20 @@
-# %%
-            # !pip install torchvision
 
-# %%
 import torch
 import torch.nn as nn
 import numpy as np
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# %%
-# from google.colab import drive
-# drive.mount('/content/drive')
 
-# %%
 save_dir = "diffusion_training_data/"
-#save_dir = '/content/drive/MyDrive/ai ai pong/'+ save_dir
 
-
-# %%
 from torchvision.models import resnet18
 
-# %%
-# !pip install torchvision
-# !pip install tensorboard
-# !pip uninstall conditional_diffusion
-
-#install torch with cuda
-            # !pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-            # !pip install git+https://github.com/stevenharperja/conditional_diffusion.git#egg=conditional_diffusion
-
-
-# %%
 torch.cuda.is_available()
-import torch
 
-# %%
-            # !pip install tensorboard
 import conditional_diffusion.modules as modules
 from conditional_diffusion.ddpm_conditional import Diffusion as Diffusion
 import conditional_diffusion.utils as utils
-import torch
 
 # %%
 from tqdm import tqdm 
@@ -180,8 +155,6 @@ net = Net(device).to(device)
 
 # %%
 from torch.utils.data import Dataset
-# from torchvision import datasets
-# from torchvision.transforms import ToTensor
 from os import listdir
 from os.path import isfile, join
 
@@ -198,11 +171,6 @@ class PongDataset(Dataset):
         else:
             return 0
     def __getitem__(self, index):
-        # transitions = np.load(save_dir + "transitions{i}.npz".format(index))
-        # observations = transitions["observations"]
-        # actions = transitions["actions"]
-        # rewards = transitions["rewards"]
-        # dones = transitions["dones"]
 
         #use data which was preformatted for the 'trivial' model
         input = torch.load(self.dir+"input{i}.pt".format(i=index)).to(self.device)
@@ -252,11 +220,6 @@ def noise_given_noise(x,t,noise):
 small_transform = torchvision.transforms.Resize((64, 64))
 big_transform = torchvision.transforms.Resize((224,224))
 
-# %%
-# %pip install ipywidgets
-# %pip install jupyter_contrib_nbextensions
-# !jupyter contrib nbextension install --user
-# !jupyter nbextension enable --py widgetsnbextension # removed !pip on the recommendation of a comment.
 
 # %%
 from conditional_diffusion.ddpm_conditional import Diffusion
@@ -337,40 +300,3 @@ for epoch in range(300):  # loop over the dataset multiple times
         net.train()
 
 print('Finished Training')
-
-# %%
-PATH = './models/pong_gen.pth'
-torch.save(net.state_dict(), PATH)
-
-# %%
-net = Net(hidden_channels=hidden_channels)
-net.load_state_dict(torch.load(PATH))
-
-# %%
-input = None
-net.eval()
-for i, data in enumerate(trainloader, 0):
-    print(i)
-    input, truth = data
-    break
-
-output = net(input[0].unsqueeze(0))[0]
-print(output.shape)
-
-# %%
-from PIL import Image
-image = Image.fromarray(input[0][0].cpu().detach().numpy())# true value
-image.show()
-
-image = Image.fromarray(output[0][0].cpu().detach().numpy())# predicted value
-image.show()
-print(output[0][0].cpu().detach().numpy())
-
-# %%
-gif = []
-images = [Image.fromarray(observation) for observation in observations]
-for image in images:
-    gif.append(image)
-gif[0].save('temp/result.gif', save_all=True,optimize=False, append_images=gif[1:], loop=0)
-
-
