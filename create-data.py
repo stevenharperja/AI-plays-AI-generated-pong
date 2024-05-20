@@ -139,6 +139,7 @@ class Saver():
         self.j += 1
 
         if self.j >= self.file_limit:
+            print("There are at least {} files. Stopping data generator.".format(self.file_limit))
             sys.exit(0)
 
         input,truth = self._convert_to_tensors()
