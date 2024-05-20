@@ -289,7 +289,7 @@ for epoch in range(300):  # loop over the dataset multiple times
         labels = torch.arange(10).long().to(device)
         sampled_images = net(input[0].unsqueeze(0))[0]
         # ema_sampled_images = diffusion.sample(ema_model, n=len(labels), labels=labels)
-        plot_images(sampled_images)
+        #plot_images(sampled_images)
         os.makedirs("results/{}".format(run_name), exist_ok = True)
         save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
         # save_images(ema_sampled_images, os.path.join("results", run_name, f"{epoch}_ema.jpg"))
