@@ -30,7 +30,7 @@ import argparse
 
 # pass argument to enable ema during training (costs more memory but may improve training)
 parser = argparse.ArgumentParser()
-parser.add_argument("-e", "--use_ema", type=bool, default=False)
+parser.add_argument("-u", "--use_ema", type=bool, default=False)
 parser.add_argument("-b", "--batch_size", type=int, default=8)
 args = parser.parse_args()
 use_ema = args.use_ema
