@@ -29,7 +29,6 @@ import logging
 assert(torch.cuda.is_available(), "no cuda found! you cant run this model without a graphics card connected!")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 save_dir = "diffusion_training_data/"
-
 # %%
 class Net(nn.Module):
     def __init__(self, device, embedding_scale = 0):
@@ -164,6 +163,7 @@ class Net(nn.Module):
 
 # %%
 # Create an instance of the network
+print("Creating model")
 net = Net(device).to(device)
 
 # %%
@@ -241,7 +241,7 @@ logger = SummaryWriter(os.path.join("runs", run_name))
 # ema = EMA(0.995)
 # ema_model = copy.deepcopy(net).eval().requires_grad_(False)
 l = len(trainloader)
-
+print("Starting training")
 net.train()
 for epoch in range(300):  # loop over the dataset multiple times
 
