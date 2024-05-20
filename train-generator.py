@@ -25,6 +25,14 @@ from conditional_diffusion.ddpm_conditional import save_images
 from conditional_diffusion.modules import EMA
 import os
 import logging
+import copy
+import argparse
+
+# pass argument to enable ema during training (costs more memory but may improve training)
+parser = argparse.ArgumentParser()
+parser.add_argument("-e", "--use_ema", type=bool, default=False)
+args = parser.parse_args()
+use_ema = args.use_ema
 
 assert(torch.cuda.is_available(), "no cuda found! you cant run this model without a graphics card connected!")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -238,8 +246,11 @@ run_name = "Pong_Generator"
 
 diffusion = Diffusion(img_size=64, device=device)
 logger = SummaryWriter(os.path.join("runs", run_name))
-# ema = EMA(0.995)
-# ema_model = copy.deepcopy(net).eval().requires_grad_(False)
+ema = None
+ema_model = None
+if use_ema:
+    ema = EMA(0.995)
+    ema_model = copy.deepcopy(net).eval().requires_grad_(False)
 l = len(trainloader)
 print("Starting training")
 net.train()
@@ -279,7 +290,8 @@ for epoch in range(300):  # loop over the dataset multiple times
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        # ema.step_ema(ema_model, model)
+        if use_ema:
+            ema.step_ema(ema_model, net)
 
         pbar.set_postfix(MSE=loss.item())
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
@@ -288,15 +300,16 @@ for epoch in range(300):  # loop over the dataset multiple times
         net.eval()
         labels = torch.arange(10).long().to(device)
         sampled_images = net(input[0].unsqueeze(0))[0]
-        # ema_sampled_images = diffusion.sample(ema_model, n=len(labels), labels=labels)
         #plot_images(sampled_images)
         os.makedirs("results/{}".format(run_name), exist_ok = True)
         save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
-        # save_images(ema_sampled_images, os.path.join("results", run_name, f"{epoch}_ema.jpg"))
         os.makedirs("models/{}".format(run_name), exist_ok = True)
         torch.save(net.state_dict(), os.path.join("models", run_name, f"ckpt.pt"))
-        # torch.save(ema_model.state_dict(), os.path.join("models", run_name, f"ema_ckpt.pt"))
         torch.save(optimizer.state_dict(), os.path.join("models", run_name, f"optim.pt"))
+        if use_ema:
+            ema_sampled_images = ema_model(input[0].unsqueeze(0))[0]
+            save_images(ema_sampled_images, os.path.join("results", run_name, f"{epoch}_ema.jpg"))
+            torch.save(ema_model.state_dict(), os.path.join("models", run_name, f"ema_ckpt.pt"))
         net.train()
 
 print('Finished Training')
