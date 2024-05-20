@@ -1,5 +1,5 @@
 # %%
-!pip install torchvision
+            # !pip install torchvision
 
 # %%
 import torch
@@ -26,8 +26,8 @@ from torchvision.models import resnet18
 # !pip uninstall conditional_diffusion
 
 #install torch with cuda
-!pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-!pip install git+https://github.com/stevenharperja/conditional_diffusion.git#egg=conditional_diffusion
+            # !pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+            # !pip install git+https://github.com/stevenharperja/conditional_diffusion.git#egg=conditional_diffusion
 
 
 # %%
@@ -35,7 +35,7 @@ torch.cuda.is_available()
 import torch
 
 # %%
-!pip install tensorboard
+            # !pip install tensorboard
 import conditional_diffusion.modules as modules
 from conditional_diffusion.ddpm_conditional import Diffusion as Diffusion
 import conditional_diffusion.utils as utils

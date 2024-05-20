@@ -9,10 +9,10 @@
 #!pip install pyvirtualdisplay
 #!pip install pyglet==1.5.1
 #!pip install imageio
-!pip install gym[atari]
-!pip install autorom[accept-rom-license]
-!pip install torchvision
-!pip install torch
+                # !pip install gym[atari]
+                # !pip install autorom[accept-rom-license]
+                # !pip install torchvision
+                # !pip install torch
 
 # %%
 # # Virtual display
