@@ -19,3 +19,6 @@ whats a visual transformer?
 what is latent diffusion?
 what is auto regressive transformer? this looks very useful for the project
 what is ddim?
+
+## implementation
+How do I train the diffusion model with upscaling?
