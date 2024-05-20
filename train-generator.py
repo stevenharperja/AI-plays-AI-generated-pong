@@ -101,7 +101,7 @@ class Net(nn.Module):
     def diffusion_sample(self, embedding): # see https://github.com/stevenharperja/conditional_diffusion/blob/main/conditional_diffusion/ddpm_conditional.py#L41
         n = embedding.size()[0]
         x = torch.randn((n, 3, 64, 64)).to(self.device)
-        for i in tqdm(reversed(range(1, self.noise_steps)), position=0):
+        for i in tqdm(reversed(range(1, self.noise_steps)), position=0, ascii=True):
             t = (torch.ones(n) * i).long().to(self.device)
             predicted_noise = self.diffusion_model(x, t, embedding)
             if self.embedding_scale > 0:
