@@ -1,29 +1,3 @@
-# %% [markdown]
-# Adapted from
-# https://colab.research.google.com/github/huggingface/deep-rl-class/blob/master/notebooks/unit4/unit4.ipynb#scrollTo=V8oadoJSWp7C
-
-# %%
-#!apt install python-opengl
-#!apt install ffmpeg
-#!apt install xvfb
-#!pip install pyvirtualdisplay
-#!pip install pyglet==1.5.1
-#!pip install imageio
-                # !pip install gym[atari]
-                # !pip install autorom[accept-rom-license]
-                # !pip install torchvision
-                # !pip install torch
-
-# %%
-# # Virtual display
-# from pyvirtualdisplay import Display
-
-# virtual_display = Display(visible=0, size=(1400, 900))
-# virtual_display.start()
-
-# %%
-# !pip install -r https://raw.githubusercontent.com/huggingface/deep-rl-class/main/notebooks/unit4/requirements-unit4.txt
-
 # %%
 import numpy as np
 
@@ -46,22 +20,6 @@ env_id = "ALE/Pong-v5"
 # Create the env
 env = gym.make(env_id,obs_type="grayscale",full_action_space=False)
 
-# Create the evaluation env
-eval_env = gym.make(env_id,obs_type="grayscale",full_action_space=False)
-
-# Get the state space and action space
-s_size = gym.spaces.utils.flatten_space(env.observation_space).shape[0]
-a_size = env.action_space.n
-
-# %%
-print("_____OBSERVATION SPACE_____ \n")
-print("The State Space is: ", s_size)
-print("Sample observation", env.observation_space.sample()) # Get a random observation
-
-# %%
-print("\n _____ACTION SPACE_____ \n")
-print("The Action Space is: ", a_size)
-print("Action Space Sample", env.action_space.sample()) # Take a random action
 
 # %%
 from os import listdir
@@ -194,8 +152,6 @@ class Saver():
 import torchvision
 save_dir = "diffusion_training_data/"
 imagenet_stats = ((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
-
-#TODO add a transform for, and also save, a small version of the truth image.
 
 in_transform = torchvision.transforms.Compose([
     torchvision.transforms.Resize((224, 224)),
