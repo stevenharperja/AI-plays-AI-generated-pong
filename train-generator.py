@@ -32,9 +32,11 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-u", "--use_ema", type=bool, default=False)
 parser.add_argument("-b", "--batch_size", type=int, default=8)
+parser.add_argument("-e", "--epochs", type=int, default=300)
 args = parser.parse_args()
 use_ema = args.use_ema
 batch_size = args.batch_size
+num_epochs = args.epochs
 
 assert(torch.cuda.is_available(), "no cuda found! you cant run this model without a graphics card connected!")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -255,7 +257,7 @@ if use_ema:
 l = len(trainloader)
 print("Starting training")
 net.train()
-for epoch in range(300):  # loop over the dataset multiple times
+for epoch in range(num_epochs):  # loop over the dataset multiple times
 
     logging.info(f"Starting epoch {epoch}:")
     pbar = tqdm(trainloader, position=0,leave=True, ascii=True)
