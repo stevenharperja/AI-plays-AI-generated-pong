@@ -1,0 +1,8 @@
+gym[atari] >=0.26.2
+numpy==1.26.4
+Pillow==10.3.0
+torchvision==0.18.0
+torch==2.2.2
+tqdm==4.66.4
+autorom[accept-rom-license]
+git+https://github.com/stevenharperja/conditional_diffusion.git#egg=conditional_diffusion
