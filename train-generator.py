@@ -74,8 +74,8 @@ class Net(nn.Module):
         ###init upscaler model
         upscaler = nn.Sequential(
             nn.Upsample(size=(224,224), mode="bilinear", align_corners=True),
-            modules.DoubleConv(3,3,residual=True),
-            modules.DoubleConv(3,3,residual=True)
+            # modules.DoubleConv(3,3,residual=True),
+            # modules.DoubleConv(3,3,residual=True)
         )
 
         #input of (N, 3, 224, 224), output of (N, 256)
@@ -86,7 +86,7 @@ class Net(nn.Module):
         
         self.diffusion_model = diffusion_model #input of (N,256) output of (N,3,64,64)
         self.upscaler = upscaler
-        self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
+        # self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
         #input of (N, 256), output of (N, 1)
         self.reward_maker = nn.Sequential(
             nn.Linear(in_features=256, out_features=1),
@@ -161,7 +161,7 @@ class Net(nn.Module):
             unscaled_image = self.diffusion_sample(embedding) #(n,3,64,64) 
 
         image = self.upscaler(unscaled_image)
-        image = self.final_layer(image)#(n,1,224,224)
+        # image = self.final_layer(image)#(n,1,224,224)
         #if not self.train:
         image = (image.clamp(-1, 1) + 1) / 2
         image = (image * 255).type(torch.uint8)
@@ -212,6 +212,8 @@ if os.path.exists("models/Pong_Generator/ckpt.pt"):
     print("Loading model from file")
     ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
     net.load_state_dict(ckpt)
+    # print("removing conv layers")
+    # net.upscaler = nn.Upsample(size=(224,224), mode="bilinear", align_corners=True)
 
 ema = None
 ema_model = None
@@ -222,8 +224,11 @@ if use_ema:
         ckpt = torch.load("models/Pong_Generator/ema_ckpt.pt", map_location=device)
         ema_model = Net(device).to(device)
         ema_model.load_state_dict(ckpt)
+        # print("removing conv layers")
+        # net.upscaler = nn.Upsample(size=(224,224), mode="bilinear", align_corners=True)
     else:
         ema_model = copy.deepcopy(net).eval().requires_grad_(False)
+    
 # %%
 #see https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 
