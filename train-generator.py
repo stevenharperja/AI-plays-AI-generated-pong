@@ -236,6 +236,9 @@ rew_criterion = nn.MSELoss()
 don_criterion = nn.MSELoss()
 optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)
 
+print("loading optimizer from file")
+if os.path.exists("models/Pong_Generator/optim.pt"):
+    optimizer.load_state_dict(torch.load("models/Pong_Generator/optim.pt"))
 
 image_importance = 10 #hyperparameter for weighting how important the image is in the loss function.
 
