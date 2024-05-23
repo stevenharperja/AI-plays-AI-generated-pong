@@ -177,6 +177,22 @@ class Net(nn.Module):
 # Create an instance of the network
 print("Creating model")
 net = Net(device).to(device)
+if os.path.exists("models/Pong_Generator/ckpt.pt"):
+    print("Loading model from file")
+    ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
+    net.load_state_dict(ckpt)
+
+ema = None
+ema_model = None
+if use_ema:
+    ema = EMA(0.995)
+    if os.path.exists("models/Pong_Generator/ema_ckpt.pt"):
+        print("Loading EMA model from file")
+        ckpt = torch.load("models/Pong_Generator/ema_ckpt.pt", map_location=device)
+        ema_model = Net(device).to(device)
+        ema_model.load_state_dict(ckpt)
+    else:
+        ema_model = copy.deepcopy(net).eval().requires_grad_(False)
 
 # %%
 
@@ -249,11 +265,7 @@ run_name = "Pong_Generator"
 
 diffusion = Diffusion(img_size=64, device=device)
 logger = SummaryWriter(os.path.join("runs", run_name))
-ema = None
-ema_model = None
-if use_ema:
-    ema = EMA(0.995)
-    ema_model = copy.deepcopy(net).eval().requires_grad_(False)
+
 l = len(trainloader)
 print("Starting training")
 net.train()
