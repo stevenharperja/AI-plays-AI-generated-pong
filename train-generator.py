@@ -285,6 +285,7 @@ if existing_files:
 l = len(trainloader)
 print("Starting training")
 net.train()
+ema_model.eval() #always have the ema model in eval mode
 for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the dataset multiple times
 
     logging.info(f"Starting epoch {epoch}:")
