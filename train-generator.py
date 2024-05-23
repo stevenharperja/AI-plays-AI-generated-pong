@@ -299,7 +299,7 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
         pbar.set_postfix(MSE=loss.item())
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
 
-    if epoch % 10 == 0:
+    if epoch % 10 == 0 or epoch == num_epochs - 1:
         net.eval()
         labels = torch.arange(10).long().to(device)
         sampled_images = net(input[0].unsqueeze(0))[0]
