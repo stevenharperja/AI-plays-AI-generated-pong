@@ -203,6 +203,27 @@ trainset = PongDataset(save_dir,device)
 if __name__ == '__main__':
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=False)#, num_workers=1)
 
+
+# %%
+# Create an instance of the network
+print("Creating model")
+net = Net(device).to(device)
+if os.path.exists("models/Pong_Generator/ckpt.pt"):
+    print("Loading model from file")
+    ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
+    net.load_state_dict(ckpt)
+
+ema = None
+ema_model = None
+if use_ema:
+    ema = EMA(0.995)
+    if os.path.exists("models/Pong_Generator/ema_ckpt.pt"):
+        print("Loading EMA model from file")
+        ckpt = torch.load("models/Pong_Generator/ema_ckpt.pt", map_location=device)
+        ema_model = Net(device).to(device)
+        ema_model.load_state_dict(ckpt)
+    else:
+        ema_model = copy.deepcopy(net).eval().requires_grad_(False)
 # %%
 #see https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 
@@ -243,29 +264,6 @@ big_transform = torchvision.transforms.Resize((224,224))
 
 
 run_name = "Pong_Generator"
-
-# %%
-# Create an instance of the network
-print("Creating model")
-net = Net(device).to(device)
-if os.path.exists("models/Pong_Generator/ckpt.pt"):
-    print("Loading model from file")
-    ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
-    net.load_state_dict(ckpt)
-
-ema = None
-ema_model = None
-if use_ema:
-    ema = EMA(0.995)
-    if os.path.exists("models/Pong_Generator/ema_ckpt.pt"):
-        print("Loading EMA model from file")
-        ckpt = torch.load("models/Pong_Generator/ema_ckpt.pt", map_location=device)
-        ema_model = Net(device).to(device)
-        ema_model.load_state_dict(ckpt)
-    else:
-        ema_model = copy.deepcopy(net).eval().requires_grad_(False)
-
-
 
 
 diffusion = Diffusion(img_size=64, device=device)
