@@ -282,10 +282,11 @@ print("checking most recent epoch for starting point")
 
 epoch_offset = 0
 image_dir = os.path.join("results", run_name)
-existing_files = [f for f in listdir(image_dir) if isfile(join(image_dir, f))]
-if existing_files:
-    #This grabs the largest integer out of all the filenames (filter the string for digit chars, convert those chars to an int)
-    epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files]) + 1
+if os.path.exists(image_dir):
+    existing_files = [f for f in listdir(image_dir) if isfile(join(image_dir, f))]
+    if existing_files:
+        #This grabs the largest integer out of all the filenames (filter the string for digit chars, convert those chars to an int)
+        epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files]) + 1
 
 l = len(trainloader)
 print("Starting training")
