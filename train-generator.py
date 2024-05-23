@@ -173,26 +173,7 @@ class Net(nn.Module):
             return image,rew,don
 
 
-# %%
-# Create an instance of the network
-print("Creating model")
-net = Net(device).to(device)
-if os.path.exists("models/Pong_Generator/ckpt.pt"):
-    print("Loading model from file")
-    ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
-    net.load_state_dict(ckpt)
 
-ema = None
-ema_model = None
-if use_ema:
-    ema = EMA(0.995)
-    if os.path.exists("models/Pong_Generator/ema_ckpt.pt"):
-        print("Loading EMA model from file")
-        ckpt = torch.load("models/Pong_Generator/ema_ckpt.pt", map_location=device)
-        ema_model = Net(device).to(device)
-        ema_model.load_state_dict(ckpt)
-    else:
-        ema_model = copy.deepcopy(net).eval().requires_grad_(False)
 
 # %%
 
@@ -263,13 +244,47 @@ big_transform = torchvision.transforms.Resize((224,224))
 
 run_name = "Pong_Generator"
 
+# %%
+# Create an instance of the network
+print("Creating model")
+net = Net(device).to(device)
+if os.path.exists("models/Pong_Generator/ckpt.pt"):
+    print("Loading model from file")
+    ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
+    net.load_state_dict(ckpt)
+
+ema = None
+ema_model = None
+if use_ema:
+    ema = EMA(0.995)
+    if os.path.exists("models/Pong_Generator/ema_ckpt.pt"):
+        print("Loading EMA model from file")
+        ckpt = torch.load("models/Pong_Generator/ema_ckpt.pt", map_location=device)
+        ema_model = Net(device).to(device)
+        ema_model.load_state_dict(ckpt)
+    else:
+        ema_model = copy.deepcopy(net).eval().requires_grad_(False)
+
+
+
+
 diffusion = Diffusion(img_size=64, device=device)
 logger = SummaryWriter(os.path.join("runs", run_name))
+
+
+print("checking most recent epoch for starting point")
+
+epoch_offset = 0
+image_dir = os.path.join("results", run_name)
+existing_files = [f for f in listdir(image_dir) if isfile(join(image_dir, f))]
+if existing_files:
+    #This grabs the largest integer out of all the filenames (filter the string for digit chars, convert those chars to an int)
+    epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files])
 
 l = len(trainloader)
 print("Starting training")
 net.train()
-for epoch in range(num_epochs):  # loop over the dataset multiple times
+for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the dataset multiple times
 
     logging.info(f"Starting epoch {epoch}:")
     pbar = tqdm(trainloader, position=0,leave=True, ascii=True)
@@ -311,7 +326,7 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
         pbar.set_postfix(MSE=loss.item())
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
 
-    if epoch % 10 == 0 or epoch == num_epochs - 1:
+    if epoch % 10 == 0 or epoch == num_epochs - 1+epoch_offset:
         net.eval()
         labels = torch.arange(10).long().to(device)
         sampled_images = net(input[0].unsqueeze(0))[0]
