@@ -14,7 +14,7 @@ from os.path import isfile, join
 import os
 import sys
 import gc
-import tqdm
+from tqdm import tqdm
 
 # %%
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
