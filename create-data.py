@@ -14,6 +14,7 @@ from os.path import isfile, join
 import os
 import sys
 import gc
+import tqdm
 
 # %%
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -169,7 +170,7 @@ small_transform = torchvision.transforms.Compose([
 
 # %%
 def run_pong(n_episodes, max_t,saver):
-    for i_episode in range(1, n_episodes+1):
+    for i_episode in tqdm(range(1, n_episodes+1), position=0,leave=True, ascii=True):
         state = env.reset()[0]
         for t in range(max_t):
             action = env.action_space.sample()
