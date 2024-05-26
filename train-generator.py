@@ -145,7 +145,8 @@ class Net(nn.Module):
             it returns a predicted image, along with a reward and done.
         
         """
-        embedding = self.zero_embedding.repeat((x.size()[0],1))
+        n = x.size()[0]
+        embedding = self.zero_embedding.repeat((n,1))
         if (not self.training) or use_embedding:
             embedding = self.encoder(x) #(n,256)       
         assert embedding.size() == (n,256)
@@ -158,8 +159,10 @@ class Net(nn.Module):
             unscaled_image = self.diffusion_model(noised_truth,t,embedding) #(n,3,64,64)
         else:
             unscaled_image = self.diffusion_sample(embedding) #(n,3,64,64) 
-
+        
         image = self.upscaler(unscaled_image)
+        # print(image)
+        # assert(False)
         # image = self.final_layer(image)#(n,1,224,224)
         if not self.training:
             image = (image.clamp(-1, 1) + 1) / 2
@@ -244,7 +247,7 @@ small_img_criterion = nn.MSELoss()
 img_criterion = nn.MSELoss()
 rew_criterion = nn.MSELoss()
 don_criterion = nn.MSELoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.AdamW(net.parameters(), lr=3e-4)
 
 if os.path.exists("models/Pong_Generator/optim.pt"):
     print("loading optimizer from file")
@@ -345,8 +348,8 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         #forward
         small_predicted_noise, predicted_noise, rew, don = net.forward(input, t = t, noised_truth = x_t, use_embedding = use_embedding)
 
-        print(predicted_noise)
-        assert False
+        # print(predicted_noise)
+        # assert False
         loss0 = small_img_criterion(small_noise,small_predicted_noise)
         loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
