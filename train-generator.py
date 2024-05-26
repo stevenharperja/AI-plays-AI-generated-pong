@@ -324,10 +324,10 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
     input = None
     for i, data in enumerate(pbar, 0):
         #print(i)
-        if i ==0:
-            sample()
 
         input, truth = data
+        if i ==0:
+            sample(input)
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
         assert(small_images.size() == (batch_size,3,64,64), "size is " + str(small_images.size()))
