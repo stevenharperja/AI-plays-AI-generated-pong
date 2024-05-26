@@ -163,7 +163,7 @@ class Net(nn.Module):
         image = self.upscaler(unscaled_image)
         # print(image)
         # assert(False)
-        image = self.final_layer(image)#(n,1,224,224)
+        #image = self.final_layer(image)#(n,1,224,224)
         if not self.training:
             image = (image.clamp(-1, 1) + 1) / 2
             image = (image * 255).type(torch.uint8)
