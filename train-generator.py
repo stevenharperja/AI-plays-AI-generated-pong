@@ -73,7 +73,7 @@ class Net(nn.Module):
 
         ###init upscaler model
         upscaler = nn.Sequential(
-            nn.Upsample(size=(224,224), mode="bilinear", align_corners=True),
+            nn.Upsample(size=(224,224), mode="nearest", align_corners=True),
             # modules.DoubleConv(3,3,residual=True),
             # modules.DoubleConv(3,3,residual=True)
         )
@@ -86,7 +86,7 @@ class Net(nn.Module):
         
         self.diffusion_model = diffusion_model #input of (N,256) output of (N,3,64,64)
         self.upscaler = upscaler
-        # self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
+        self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
         #input of (N, 256), output of (N, 1)
         self.reward_maker = nn.Sequential(
             nn.Linear(in_features=256, out_features=1),
