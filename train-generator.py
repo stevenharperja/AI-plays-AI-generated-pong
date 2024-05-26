@@ -333,7 +333,6 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         if i ==0 and epoch ==0:
             sample(input,epoch-1)
         
-        continue
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
         assert(small_images.size() == (batch_size,3,64,64), "size is " + str(small_images.size()))
@@ -348,6 +347,7 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         use_embedding = True
         if np.random.random() < 0.1: #randomly dont use embedding to generate an image.
             use_embedding = False
+        continue
         #forward
         small_predicted_noise, predicted_noise, rew, don = net.forward(input, t = t, noised_truth = x_t, use_embedding = use_embedding)
 
