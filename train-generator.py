@@ -74,8 +74,8 @@ class Net(nn.Module):
         ###init upscaler model
         upscaler = nn.Sequential(
             nn.Upsample(size=(224,224), mode="nearest"),
-            # modules.DoubleConv(3,3,residual=True),
-            # modules.DoubleConv(3,3,residual=True)
+            modules.DoubleConv(3,3,residual=True),
+             modules.DoubleConv(3,3,residual=True)
         )
 
         #input of (N, 3, 224, 224), output of (N, 256)
@@ -146,7 +146,8 @@ class Net(nn.Module):
         
         """
         n = x.size()[0]
-        embedding = torch.zeros((n,256)).to(self.device) #self.zero_embedding.repeat((n,1))
+        #embedding = torch.zeros((n,256)).to(self.device) 
+        embedding = self.zero_embedding.repeat((n,1))
         if (not self.training) or use_embedding:#if testing, or have use embedding on.
             embedding = self.encoder(x) #(n,256)       
         assert embedding.size() == (n,256)
@@ -156,17 +157,17 @@ class Net(nn.Module):
                 raise Exception("Cannot train without a provided noised target image")
             if t == None:
                 raise Exception("Cannot train without a provided timesteps vector")
-            temp_noised_truth = noised_truth.clone()
-            temp_t = t.clone()
+            # temp_noised_truth = noised_truth.clone()
+            # temp_t = t.clone()
             unscaled_image = self.diffusion_model(temp_noised_truth,temp_t,embedding) #(n,3,64,64)
         else:
             unscaled_image = self.diffusion_sample(embedding) #(n,3,64,64) 
         
         image = self.upscaler(unscaled_image)
-        #image = self.final_layer(image)#(n,1,224,224)
+        image = self.final_layer(image)#(n,1,224,224)
+        # print(image)
+        # assert(False)
         if not self.training:#if testing
-            # print(image)
-            # assert(False)
             image = (image.clamp(-1, 1) + 1) / 2
             image = (image * 255).type(torch.uint8)
         rew = self.done_maker(embedding) #(n,1)
@@ -351,22 +352,22 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
             use_embedding = False
         #forward
         small_predicted_noise, predicted_noise, rew, don = net.forward(input, t = t, noised_truth = x_t, use_embedding = use_embedding)
-        continue
+        # continue
 
         # print(predicted_noise)
         # assert False
         loss0 = small_img_criterion(small_noise,small_predicted_noise)
-        #loss1 = img_criterion(noise,predicted_noise)
+        loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
         loss3 = don_criterion(don,truth[3])
-        loss = loss2 + loss3
+        loss = loss0 + loss1 + loss2 + loss3
 
-        # # zero the parameter gradients
-        # optimizer.zero_grad()
-        # loss.backward()
-        # optimizer.step()
-        # if use_ema:
-        #     ema.step_ema(ema_model, net)
+        # zero the parameter gradients
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        if use_ema:
+            ema.step_ema(ema_model, net)
 
         pbar.set_postfix(MSE=loss.item())
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
