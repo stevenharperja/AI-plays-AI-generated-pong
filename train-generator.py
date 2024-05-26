@@ -74,8 +74,8 @@ class Net(nn.Module):
         ###init upscaler model
         upscaler = nn.Sequential(
             nn.Upsample(size=(224,224), mode="bilinear", align_corners=True),
-            modules.DoubleConv(3,3,residual=True),
-            modules.DoubleConv(3,3,residual=True)
+            # modules.DoubleConv(3,3,residual=True),
+            # modules.DoubleConv(3,3,residual=True)
         )
 
         #input of (N, 3, 224, 224), output of (N, 256)
@@ -86,7 +86,7 @@ class Net(nn.Module):
         
         self.diffusion_model = diffusion_model #input of (N,256) output of (N,3,64,64)
         self.upscaler = upscaler
-        self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
+        # self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
         #input of (N, 256), output of (N, 1)
         self.reward_maker = nn.Sequential(
             nn.Linear(in_features=256, out_features=1),
@@ -161,7 +161,7 @@ class Net(nn.Module):
             unscaled_image = self.diffusion_sample(embedding) #(n,3,64,64) 
 
         image = self.upscaler(unscaled_image)
-        image = self.final_layer(image)#(n,1,224,224)
+        # image = self.final_layer(image)#(n,1,224,224)
         #if not self.train:
         image = (image.clamp(-1, 1) + 1) / 2
         image = (image * 255).type(torch.uint8)
@@ -173,10 +173,7 @@ class Net(nn.Module):
             return image,rew,don
 
 
-# %%
-# Create an instance of the network
-print("Creating model")
-net = Net(device).to(device)
+
 
 # %%
 
@@ -206,6 +203,32 @@ trainset = PongDataset(save_dir,device)
 if __name__ == '__main__':
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=False)#, num_workers=1)
 
+
+# %%
+# Create an instance of the network
+print("Creating model")
+net = Net(device).to(device)
+if os.path.exists("models/Pong_Generator/ckpt.pt"):
+    print("Loading model from file")
+    ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
+    net.load_state_dict(ckpt)
+    # print("removing conv layers")
+    # net.upscaler = nn.Upsample(size=(224,224), mode="bilinear", align_corners=True)
+
+ema = None
+ema_model = None
+if use_ema:
+    ema = EMA(0.995)
+    if os.path.exists("models/Pong_Generator/ema_ckpt.pt"):
+        print("Loading EMA model from file")
+        ckpt = torch.load("models/Pong_Generator/ema_ckpt.pt", map_location=device)
+        ema_model = Net(device).to(device)
+        ema_model.load_state_dict(ckpt)
+        # print("removing conv layers")
+        # net.upscaler = nn.Upsample(size=(224,224), mode="bilinear", align_corners=True)
+    else:
+        ema_model = copy.deepcopy(net).eval().requires_grad_(False)
+    
 # %%
 #see https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html
 
@@ -218,6 +241,9 @@ rew_criterion = nn.MSELoss()
 don_criterion = nn.MSELoss()
 optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)
 
+if os.path.exists("models/Pong_Generator/optim.pt"):
+    print("loading optimizer from file")
+    optimizer.load_state_dict(torch.load("models/Pong_Generator/optim.pt"))
 
 image_importance = 10 #hyperparameter for weighting how important the image is in the loss function.
 
@@ -247,17 +273,26 @@ big_transform = torchvision.transforms.Resize((224,224))
 
 run_name = "Pong_Generator"
 
+
 diffusion = Diffusion(img_size=64, device=device)
 logger = SummaryWriter(os.path.join("runs", run_name))
-ema = None
-ema_model = None
-if use_ema:
-    ema = EMA(0.995)
-    ema_model = copy.deepcopy(net).eval().requires_grad_(False)
+
+
+print("checking most recent epoch for starting point")
+
+epoch_offset = 0
+image_dir = os.path.join("results", run_name)
+if os.path.exists(image_dir):
+    existing_files = [f for f in listdir(image_dir) if isfile(join(image_dir, f))]
+    if existing_files:
+        #This grabs the largest integer out of all the filenames (filter the string for digit chars, convert those chars to an int)
+        epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files]) + 1
+
 l = len(trainloader)
 print("Starting training")
 net.train()
-for epoch in range(num_epochs):  # loop over the dataset multiple times
+ema_model.eval() #always have the ema model in eval mode
+for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the dataset multiple times
 
     logging.info(f"Starting epoch {epoch}:")
     pbar = tqdm(trainloader, position=0,leave=True, ascii=True)
@@ -299,7 +334,7 @@ for epoch in range(num_epochs):  # loop over the dataset multiple times
         pbar.set_postfix(MSE=loss.item())
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
 
-    if epoch % 10 == 0:
+    if epoch % 10 == 0 or epoch == num_epochs - 1+epoch_offset:
         net.eval()
         labels = torch.arange(10).long().to(device)
         sampled_images = net(input[0].unsqueeze(0))[0]
