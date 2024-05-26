@@ -145,7 +145,6 @@ class Net(nn.Module):
             it returns a predicted image, along with a reward and done.
         
         """
-
         embedding = self.zero_embedding.repeat((x.size()[0],1))
         if (not self.training) or use_embedding:
             embedding = self.encoder(x) #(n,256)       
@@ -195,6 +194,12 @@ class PongDataset(Dataset):
         input = torch.load(self.dir+"input{i}.pt".format(i=index)).to(self.device)
         truth = torch.load(self.dir+"truth{i}.pt".format(i=index))
         truth = tuple([t.to(self.device)for t in truth])
+        assert len(truth) == 4, "length is {}".format(len(truth))
+        assert input.shape == (3,224,224)
+        assert truth[0].shape == (3,64,64)
+        assert truth[1].shape == (3,224,224), "shape is {}".format(truth[1].shape)
+        assert truth[2].shape == (1,)
+        assert truth[3].shape == (1,)
 
         return input, truth 
 
@@ -239,7 +244,7 @@ small_img_criterion = nn.MSELoss()
 img_criterion = nn.MSELoss()
 rew_criterion = nn.MSELoss()
 don_criterion = nn.MSELoss()
-optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
 if os.path.exists("models/Pong_Generator/optim.pt"):
     print("loading optimizer from file")
@@ -302,7 +307,7 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         #print(i)
         input, truth = data
         small_images = truth[0] #64 by 64 image
-        #images = truth[1] #224 by 224 image
+        images = truth[1] #224 by 224 image
         assert(small_images.size() == (batch_size,3,64,64), "size is " + str(small_images.size()))
 
 
@@ -316,13 +321,13 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         if np.random.random() < 0.1: #randomly dont use embedding to generate an image.
             use_embedding = False
         #forward
-        small_predicted_noise, predicted_noise, rew, don = net(input, t = t, noised_truth = x_t, use_embedding = use_embedding)
+        small_predicted_noise, predicted_noise, rew, don = net.forward(input, t = t, noised_truth = x_t, use_embedding = use_embedding)
 
         loss0 = small_img_criterion(small_noise,small_predicted_noise)
         loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
         loss3 = don_criterion(don,truth[3])
-        loss = loss0 + loss1 + loss2 + loss3
+        loss = loss0 + loss2 + loss3
 
         # zero the parameter gradients
         optimizer.zero_grad()
