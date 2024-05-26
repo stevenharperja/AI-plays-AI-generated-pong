@@ -305,7 +305,7 @@ def sample(input,epoch):
     #make only 3 images or a max of batch size
     num_samples = min(3,batch_size)
     sampled_images = net.forward(input[:num_samples,:,:,:])[0]
-    print(sampled_images)
+    #print(sampled_images)
     #plot_images(sampled_images)
     os.makedirs("results/{}".format(run_name), exist_ok = True)
     save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
