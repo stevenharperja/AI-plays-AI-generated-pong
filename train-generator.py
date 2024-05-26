@@ -282,7 +282,7 @@ big_transform = torchvision.transforms.Resize((224,224))
 run_name = "Pong_Generator"
 
 
-diffusion = Diffusion(img_size=64, device=device)
+diffusion = Diffusion(noise_steps=net.noise_steps,beta_start=net.beta_start,beta_end=net.beta_end,img_size=64, device=device)
 logger = SummaryWriter(os.path.join("runs", run_name))
 
 
