@@ -16,6 +16,12 @@ import sys
 import gc
 from tqdm import tqdm
 import math
+import argparse
+# pass argument to enable ema during training (costs more memory but may improve training)
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--data_amount", type=int, default=10000)
+args = parser.parse_args()
+max_t = args.data_amount
 
 # %%
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -179,6 +185,7 @@ class Saver():
 
 save_dir = "diffusion_training_data/"
 imagenet_stats = ((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
+diffusion_stats = ((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 
 in_transform = torchvision.transforms.Compose([
     torchvision.transforms.Resize((224, 224)),
@@ -186,6 +193,7 @@ in_transform = torchvision.transforms.Compose([
                                       ])
 out_transform = torchvision.transforms.Compose([
     torchvision.transforms.Resize((224, 224)),
+    torchvision.transforms.Normalize(diffusion_stats[0], diffusion_stats[1])
                                       ])
 small_transform = torchvision.transforms.Compose([
     torchvision.transforms.Resize((64, 64)),
@@ -204,8 +212,8 @@ def run_pong(n_episodes, max_t,saver):
         
 
 # %%
-n_episodes = 100
-max_t = 100000 #maximum number of files you want
+#max_t = 1000 #maximum number of files you want
+n_episodes = max(max_t/100,1) #number of episodes you want to run
 saver = Saver(save_dir,in_transform=in_transform,out_transform=out_transform, small_transform=small_transform, file_limit=max_t)
 run_pong(n_episodes,max_t,saver)
 
