@@ -329,7 +329,7 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         #print(i)
 
         input, truth = data
-        if i ==0 and epoch:
+        if i ==0 and epoch ==0:
             sample(input,epoch-1)
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
