@@ -159,7 +159,7 @@ class Net(nn.Module):
                 raise Exception("Cannot train without a provided timesteps vector")
             # temp_noised_truth = noised_truth.clone()
             # temp_t = t.clone()
-            unscaled_image = self.diffusion_model(temp_noised_truth,temp_t,embedding) #(n,3,64,64)
+            unscaled_image = self.diffusion_model(noised_truth,t,embedding) #(n,3,64,64)
         else:
             unscaled_image = self.diffusion_sample(embedding) #(n,3,64,64) 
         
