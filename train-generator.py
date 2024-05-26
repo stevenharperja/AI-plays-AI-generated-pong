@@ -151,12 +151,14 @@ class Net(nn.Module):
             embedding = self.encoder(x) #(n,256)       
         assert embedding.size() == (n,256)
         unscaled_image = None
-        if self.training:
+        if self.training:#training
             if noised_truth == None:
                 raise Exception("Cannot train without a provided noised target image")
             if t == None:
                 raise Exception("Cannot train without a provided timesteps vector")
-            unscaled_image = self.diffusion_model(noised_truth,t,embedding) #(n,3,64,64)
+            temp_noised_truth = noised_truth.clone()
+            temp_t = t.clone()
+            unscaled_image = self.diffusion_model(temp_noised_truth,temp_t,embedding) #(n,3,64,64)
         else:
             unscaled_image = self.diffusion_sample(embedding) #(n,3,64,64) 
         
