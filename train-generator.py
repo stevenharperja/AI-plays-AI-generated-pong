@@ -161,10 +161,10 @@ class Net(nn.Module):
             unscaled_image = self.diffusion_sample(embedding) #(n,3,64,64) 
         
         image = self.upscaler(unscaled_image)
-        # print(image)
-        # assert(False)
         #image = self.final_layer(image)#(n,1,224,224)
         if not self.training:
+            # print(image)
+            # assert(False)
             image = (image.clamp(-1, 1) + 1) / 2
             image = (image * 255).type(torch.uint8)
         rew = self.done_maker(embedding) #(n,1)
@@ -318,7 +318,8 @@ def sample(input,epoch):
 l = len(trainloader)
 print("Starting training")
 net.train()
-ema_model.eval() #always have the ema model in eval mode
+if use_ema:
+    ema_model.eval() #always have the ema model in eval mode
 for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the dataset multiple times
 
     logging.info(f"Starting epoch {epoch}:")
@@ -331,6 +332,8 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         input, truth = data
         if i ==0 and epoch ==0:
             sample(input,epoch-1)
+        
+        continue
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
         assert(small_images.size() == (batch_size,3,64,64), "size is " + str(small_images.size()))
