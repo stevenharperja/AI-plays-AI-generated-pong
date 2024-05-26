@@ -148,7 +148,7 @@ class Net(nn.Module):
         embedding = self.zero_embedding.repeat((x.size()[0],1))
         if (not self.training) or use_embedding:
             embedding = self.encoder(x) #(n,256)       
-            
+        assert embedding.size() == (n,256)
         unscaled_image = None
         if self.training:
             if noised_truth == None:
@@ -345,6 +345,8 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         #forward
         small_predicted_noise, predicted_noise, rew, don = net.forward(input, t = t, noised_truth = x_t, use_embedding = use_embedding)
 
+        print(predicted_noise)
+        assert False
         loss0 = small_img_criterion(small_noise,small_predicted_noise)
         loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
