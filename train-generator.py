@@ -86,7 +86,7 @@ class Net(nn.Module):
         
         self.diffusion_model = diffusion_model #input of (N,256) output of (N,3,64,64)
         self.upscaler = upscaler
-        self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
+        #self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
         #input of (N, 256), output of (N, 1)
         self.reward_maker = nn.Sequential(
             nn.Linear(in_features=256, out_features=1),
@@ -294,7 +294,7 @@ if os.path.exists(image_dir):
         epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files]) + 1
 
 
-def sample():
+def sample(input):
     net.eval()
     #make only 3 images or a max of batch size
     num_samples = min(3,batch_size)
@@ -362,6 +362,6 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
 
     if epoch % 10 == 0 or epoch == num_epochs - 1+epoch_offset:
-        sample()
+        sample(input)
 
 print('Finished Training')
