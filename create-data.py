@@ -197,6 +197,7 @@ out_transform = torchvision.transforms.Compose([
                                       ])
 small_transform = torchvision.transforms.Compose([
     torchvision.transforms.Resize((64, 64)),
+    torchvision.transforms.Normalize(diffusion_stats[0], diffusion_stats[1])
                                       ])
 
 # %%
