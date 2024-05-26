@@ -126,8 +126,6 @@ class Net(nn.Module):
             else:
                 noise = torch.zeros_like(x)
             x = 1 / torch.sqrt(alpha) * (x - ((1 - alpha) / (torch.sqrt(1 - alpha_hat))) * predicted_noise) + torch.sqrt(beta) * noise
-        x = (x.clamp(-1, 1) + 1) / 2
-        x = (x * 255).type(torch.uint8)
         return x
 
 
@@ -163,9 +161,9 @@ class Net(nn.Module):
 
         image = self.upscaler(unscaled_image)
         # image = self.final_layer(image)#(n,1,224,224)
-        #if not self.train:
-        image = (image.clamp(-1, 1) + 1) / 2
-        image = (image * 255).type(torch.uint8)
+        if not self.training:
+            image = (image.clamp(-1, 1) + 1) / 2
+            image = (image * 255).type(torch.uint8)
         rew = self.done_maker(embedding) #(n,1)
         don = self.reward_maker(embedding) #(n,1)
         if self.training:
@@ -343,7 +341,6 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
 
     if epoch % 10 == 0 or epoch == num_epochs - 1+epoch_offset:
         net.eval()
-        labels = torch.arange(10).long().to(device)
         sampled_images = net(input[0].unsqueeze(0))[0]
         #plot_images(sampled_images)
         os.makedirs("results/{}".format(run_name), exist_ok = True)
