@@ -43,7 +43,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 save_dir = "diffusion_training_data/"
 # %%
 class Net(nn.Module):
-    def __init__(self, device, embedding_scale = 0):
+    def __init__(self, device, embedding_scale = 3):
         super(Net, self).__init__()
         self.embedding_scale = embedding_scale
 
@@ -126,6 +126,8 @@ class Net(nn.Module):
             else:
                 noise = torch.zeros_like(x)
             x = 1 / torch.sqrt(alpha) * (x - ((1 - alpha) / (torch.sqrt(1 - alpha_hat))) * predicted_noise) + torch.sqrt(beta) * noise
+        x = (x.clamp(-1, 1) + 1) / 2
+        x = (x * 255).type(torch.uint8)
         return x
 
 
