@@ -146,8 +146,8 @@ class Net(nn.Module):
         
         """
         n = x.size()[0]
-        embedding = self.zero_embedding.repeat((n,1))
-        if (not self.training) or use_embedding:
+        embedding = torch.zeros((n,256)).to(self.device) #self.zero_embedding.repeat((n,1))
+        if (not self.training) or use_embedding:#if testing, or have use embedding on.
             embedding = self.encoder(x) #(n,256)       
         assert embedding.size() == (n,256)
         unscaled_image = None
@@ -162,7 +162,7 @@ class Net(nn.Module):
         
         image = self.upscaler(unscaled_image)
         #image = self.final_layer(image)#(n,1,224,224)
-        if not self.training:
+        if not self.training:#if testing
             # print(image)
             # assert(False)
             image = (image.clamp(-1, 1) + 1) / 2
@@ -347,9 +347,9 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         use_embedding = True
         if np.random.random() < 0.1: #randomly dont use embedding to generate an image.
             use_embedding = False
-        continue
         #forward
         small_predicted_noise, predicted_noise, rew, don = net.forward(input, t = t, noised_truth = x_t, use_embedding = use_embedding)
+        continue
 
         # print(predicted_noise)
         # assert False
