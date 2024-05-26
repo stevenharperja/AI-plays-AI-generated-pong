@@ -110,23 +110,23 @@ class Net(nn.Module):
 
     #prediction function. this may not work for training. but maybe since its pretrained it might? work
     def diffusion_sample(self, embedding): # see https://github.com/stevenharperja/conditional_diffusion/blob/main/conditional_diffusion/ddpm_conditional.py#L41
-        n = embedding.size()[0]
-        x = torch.randn((n, 3, 64, 64)).to(self.device)
+        temp_n = embedding.size()[0]
+        temp_x = torch.randn((temp_n, 3, 64, 64)).to(self.device)
         for i in tqdm(reversed(range(1, self.noise_steps)), position=0, ascii=True):
-            t = (torch.ones(n) * i).long().to(self.device)
-            predicted_noise = self.diffusion_model(x, t, embedding)
+            temp_t = (torch.ones(temp_n) * i).long().to(self.device)
+            temp_predicted_noise = self.diffusion_model(temp_x, temp_t, embedding)
             if self.embedding_scale > 0:
-                uncond_predicted_noise = self.diffusion_model(x, t, None)
-                predicted_noise = torch.lerp(uncond_predicted_noise, predicted_noise, self.embedding_scale)
-            alpha = self.alpha[t][:, None, None, None]
-            alpha_hat = self.alpha_hat[t][:, None, None, None]
-            beta = self.beta[t][:, None, None, None]
+                temp_uncond_predicted_noise = self.diffusion_model(temp_x, temp_t, None)
+                temp_predicted_noise = torch.lerp(temp_uncond_predicted_noise, temp_predicted_noise, self.embedding_scale)
+            temp_alpha = self.alpha[temp_t][:, None, None, None]
+            temp_alpha_hat = self.alpha_hat[temp_t][:, None, None, None]
+            temp_beta = self.beta[temp_t][:, None, None, None]
             if i > 1:
-                noise = torch.randn_like(x)
+                temp_noise = torch.randn_like(temp_x)
             else:
-                noise = torch.zeros_like(x)
-            x = 1 / torch.sqrt(alpha) * (x - ((1 - alpha) / (torch.sqrt(1 - alpha_hat))) * predicted_noise) + torch.sqrt(beta) * noise
-        return x
+                temp_noise = torch.zeros_like(temp_x)
+            temp_x = 1 / torch.sqrt(temp_alpha) * (temp_x - ((1 - temp_alpha) / (torch.sqrt(1 - temp_alpha_hat))) * temp_predicted_noise) + torch.sqrt(temp_beta) * temp_noise
+        return temp_x
 
 
     def forward(self, x, t = None, noised_truth = None, use_embedding = True):
@@ -354,14 +354,14 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         #loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
         loss3 = don_criterion(don,truth[3])
-        loss = loss0 + loss2 + loss3
+        loss = loss2 + loss3
 
-        # zero the parameter gradients
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        if use_ema:
-            ema.step_ema(ema_model, net)
+        # # zero the parameter gradients
+        # optimizer.zero_grad()
+        # loss.backward()
+        # optimizer.step()
+        # if use_ema:
+        #     ema.step_ema(ema_model, net)
 
         pbar.set_postfix(MSE=loss.item())
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
