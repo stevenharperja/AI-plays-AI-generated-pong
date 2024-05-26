@@ -1,3 +1,6 @@
 diffusion_training_data
 __pycache__
 .venv
+models/Pong_Generator*
+results/*
+runs/*
