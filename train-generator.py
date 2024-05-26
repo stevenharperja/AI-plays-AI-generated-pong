@@ -207,7 +207,7 @@ class PongDataset(Dataset):
 trainset = PongDataset(save_dir,device)
 if __name__ == '__main__':
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=False)#, num_workers=1)
-
+    testloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=False)
 
 # %%
 # Create an instance of the network
@@ -302,7 +302,7 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
     logging.info(f"Starting epoch {epoch}:")
     pbar = tqdm(trainloader, position=0,leave=True, ascii=True)
 
-
+    input = None
     for i, data in enumerate(pbar, 0):
         #print(i)
         input, truth = data
@@ -341,7 +341,10 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
 
     if epoch % 10 == 0 or epoch == num_epochs - 1+epoch_offset:
         net.eval()
-        sampled_images = net(input[0].unsqueeze(0))[0]
+        #make only 3 images or a max of batch size
+        num_samples = min(3,batch_size)
+        sampled_images = net.forward(input[:num_samples,:,:,:])[0]
+        print(sampled_images)
         #plot_images(sampled_images)
         os.makedirs("results/{}".format(run_name), exist_ok = True)
         save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
