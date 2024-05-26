@@ -73,7 +73,7 @@ class Net(nn.Module):
 
         ###init upscaler model
         upscaler = nn.Sequential(
-            nn.Upsample(size=(224,224), mode="nearest", align_corners=True),
+            nn.Upsample(size=(224,224), mode="nearest"),
             # modules.DoubleConv(3,3,residual=True),
             # modules.DoubleConv(3,3,residual=True)
         )
