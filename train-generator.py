@@ -293,6 +293,25 @@ if os.path.exists(image_dir):
         #This grabs the largest integer out of all the filenames (filter the string for digit chars, convert those chars to an int)
         epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files]) + 1
 
+
+def sample():
+    net.eval()
+    #make only 3 images or a max of batch size
+    num_samples = min(3,batch_size)
+    sampled_images = net.forward(input[:num_samples,:,:,:])[0]
+    print(sampled_images)
+    #plot_images(sampled_images)
+    os.makedirs("results/{}".format(run_name), exist_ok = True)
+    save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
+    os.makedirs("models/{}".format(run_name), exist_ok = True)
+    torch.save(net.state_dict(), os.path.join("models", run_name, f"ckpt.pt"))
+    torch.save(optimizer.state_dict(), os.path.join("models", run_name, f"optim.pt"))
+    if use_ema:
+        ema_sampled_images = ema_model(input[0].unsqueeze(0))[0]
+        save_images(ema_sampled_images, os.path.join("results", run_name, f"{epoch}_ema.jpg"))
+        torch.save(ema_model.state_dict(), os.path.join("models", run_name, f"ema_ckpt.pt"))
+    net.train()
+
 l = len(trainloader)
 print("Starting training")
 net.train()
@@ -305,6 +324,9 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
     input = None
     for i, data in enumerate(pbar, 0):
         #print(i)
+        if i ==0:
+            sample()
+
         input, truth = data
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
@@ -340,21 +362,6 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
 
     if epoch % 10 == 0 or epoch == num_epochs - 1+epoch_offset:
-        net.eval()
-        #make only 3 images or a max of batch size
-        num_samples = min(3,batch_size)
-        sampled_images = net.forward(input[:num_samples,:,:,:])[0]
-        print(sampled_images)
-        #plot_images(sampled_images)
-        os.makedirs("results/{}".format(run_name), exist_ok = True)
-        save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
-        os.makedirs("models/{}".format(run_name), exist_ok = True)
-        torch.save(net.state_dict(), os.path.join("models", run_name, f"ckpt.pt"))
-        torch.save(optimizer.state_dict(), os.path.join("models", run_name, f"optim.pt"))
-        if use_ema:
-            ema_sampled_images = ema_model(input[0].unsqueeze(0))[0]
-            save_images(ema_sampled_images, os.path.join("results", run_name, f"{epoch}_ema.jpg"))
-            torch.save(ema_model.state_dict(), os.path.join("models", run_name, f"ema_ckpt.pt"))
-        net.train()
+        sample()
 
 print('Finished Training')
