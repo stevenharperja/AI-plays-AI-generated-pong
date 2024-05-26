@@ -259,17 +259,17 @@ image_importance = 10 #hyperparameter for weighting how important the image is i
 # %%
 
 
-beta_start=1e-4
-beta_end=0.02
-noise_steps = 1000
-beta = torch.linspace(beta_start, beta_end, noise_steps).to(device)
-alpha = 1. - beta
-alpha_hat = torch.cumprod(alpha, dim=0)
-def noise_given_noise(x,t,noise):
-    sqrt_alpha_hat = torch.sqrt(alpha_hat[t])[:, None, None, None]
-    sqrt_one_minus_alpha_hat = torch.sqrt(1 - alpha_hat[t])[:, None, None, None]
-    Ɛ = noise
-    return sqrt_alpha_hat * x + sqrt_one_minus_alpha_hat * Ɛ, Ɛ
+# beta_start=1e-4
+# beta_end=0.02
+# noise_steps = 1000
+# beta = torch.linspace(beta_start, beta_end, noise_steps).to(device)
+# alpha = 1. - beta
+# alpha_hat = torch.cumprod(alpha, dim=0)
+# # def noise_given_noise(x,t,noise):
+# #     sqrt_alpha_hat = torch.sqrt(alpha_hat[t])[:, None, None, None]
+# #     sqrt_one_minus_alpha_hat = torch.sqrt(1 - alpha_hat[t])[:, None, None, None]
+# #     Ɛ = noise
+# #     return sqrt_alpha_hat * x + sqrt_one_minus_alpha_hat * Ɛ, Ɛ
 
 
 small_transform = torchvision.transforms.Resize((64, 64))
