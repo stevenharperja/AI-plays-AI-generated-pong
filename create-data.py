@@ -213,7 +213,7 @@ def run_pong(n_episodes, max_t,saver):
 
 # %%
 #max_t = 1000 #maximum number of files you want
-n_episodes = max(max_t/100,1) #number of episodes you want to run
+n_episodes = max(max_t//100,1) #number of episodes you want to run
 saver = Saver(save_dir,in_transform=in_transform,out_transform=out_transform, small_transform=small_transform, file_limit=max_t)
 run_pong(n_episodes,max_t,saver)
 
