@@ -223,8 +223,8 @@ if os.path.exists("models/Pong_Generator/ckpt.pt"):
     print("Loading model from file")
     ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
     net.load_state_dict(ckpt)
-    # print("removing conv layers")
-    # net.upscaler = nn.Upsample(size=(224,224), mode="bilinear", align_corners=True)
+    print("removing conv layers")
+    upscaler = nn.Upsample(size=(224,224), mode="nearest")
 
 ema = None
 ema_model = None
@@ -275,8 +275,8 @@ image_importance = 10 #hyperparameter for weighting how important the image is i
 # #     return sqrt_alpha_hat * x + sqrt_one_minus_alpha_hat * Ɛ, Ɛ
 
 
-small_transform = torchvision.transforms.Resize((64, 64))
-big_transform = torchvision.transforms.Resize((224,224))
+small_transform = torchvision.transforms.Resize((64, 64), InterpolationMode.NEAREST)
+big_transform = torchvision.transforms.Resize((224,224), InterpolationMode.NEAREST)
 
 
 # %%
@@ -357,10 +357,10 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         # print(predicted_noise)
         # assert False
         loss0 = small_img_criterion(small_noise,small_predicted_noise)
-        loss1 = img_criterion(noise,predicted_noise)
+        # loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
         loss3 = don_criterion(don,truth[3])
-        loss = loss0 + loss1 + loss2 + loss3
+        loss = loss0 + loss2 + loss3
 
         # zero the parameter gradients
         optimizer.zero_grad()
