@@ -4,3 +4,4 @@ __pycache__
 models/Pong_Generator*
 results/*
 runs/*
+diffusion_training_data 224224

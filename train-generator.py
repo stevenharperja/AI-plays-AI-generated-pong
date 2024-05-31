@@ -2,6 +2,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
+from torchvision.transforms import InterpolationMode
 
 import conditional_diffusion.utils as utils
 

@@ -17,7 +17,8 @@ import gc
 from tqdm import tqdm
 import math
 import argparse
-# pass argument to enable ema during training (costs more memory but may improve training)
+from torchvision.transforms import InterpolationMode
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--data_amount", type=int, default=10000)
 args = parser.parse_args()
