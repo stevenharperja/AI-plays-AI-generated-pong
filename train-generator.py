@@ -225,7 +225,7 @@ if os.path.exists("models/Pong_Generator/ckpt.pt"):
     ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
     net.load_state_dict(ckpt)
     print("removing conv layers")
-    upscaler = nn.Upsample(size=(224,224), mode="nearest")
+    net.upscaler = nn.Upsample(size=(224,224), mode="nearest")
 
 ema = None
 ema_model = None
@@ -310,6 +310,8 @@ def sample(input,epoch):
     #plot_images(sampled_images)
     os.makedirs("results/{}".format(run_name), exist_ok = True)
     save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
+    save_images(input[0].unsqueeze(0), os.path.join("results", run_name, f"{epoch}_input.jpg"))
+    save_images(images[:3], os.path.join("results", run_name, f"{epoch}_truth.jpg"))
     os.makedirs("models/{}".format(run_name), exist_ok = True)
     torch.save(net.state_dict(), os.path.join("models", run_name, f"ckpt.pt"))
     torch.save(optimizer.state_dict(), os.path.join("models", run_name, f"optim.pt"))
@@ -334,8 +336,8 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         #print(i)
 
         input, truth = data
-        if i ==0 and epoch ==0:
-            sample(input,epoch-1)
+        # if i ==0 and epoch ==0:
+        sample(input,epoch-1)
         
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
