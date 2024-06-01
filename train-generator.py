@@ -28,6 +28,8 @@ import os
 import logging
 import copy
 import argparse
+# from PIL import Image
+
 
 # pass argument to enable ema during training (costs more memory but may improve training)
 parser = argparse.ArgumentParser()
@@ -73,11 +75,12 @@ class Net(nn.Module):
         diffusion_model.outc.requires_grad = True
 
         ###init upscaler model
-        upscaler = nn.Sequential(
-            nn.Upsample(size=(224,224), mode="nearest"),
-            modules.DoubleConv(3,3,residual=True),
-             modules.DoubleConv(3,3,residual=True)
-        )
+        upscaler = nn.Upsample(size=(224,224), mode="nearest")
+        # nn.Sequential(
+        #     nn.Upsample(size=(224,224), mode="nearest"),
+        #     modules.DoubleConv(3,3,residual=True),
+        #      modules.DoubleConv(3,3,residual=True)
+        # )
 
         #input of (N, 3, 224, 224), output of (N, 256)
         self.encoder = nn.Sequential(
@@ -224,8 +227,8 @@ if os.path.exists("models/Pong_Generator/ckpt.pt"):
     print("Loading model from file")
     ckpt = torch.load("models/Pong_Generator/ckpt.pt", map_location=device)
     net.load_state_dict(ckpt)
-    print("removing conv layers")
-    net.upscaler = nn.Upsample(size=(224,224), mode="nearest")
+    # print("removing conv layers")
+    # net.upscaler = nn.Upsample(size=(224,224), mode="nearest")
 
 ema = None
 ema_model = None
@@ -310,8 +313,9 @@ def sample(input,epoch):
     #plot_images(sampled_images)
     os.makedirs("results/{}".format(run_name), exist_ok = True)
     save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
-    save_images(input[0].unsqueeze(0), os.path.join("results", run_name, f"{epoch}_input.jpg"))
-    save_images(images[:3], os.path.join("results", run_name, f"{epoch}_truth.jpg"))
+    # adjust = lambda x : Image.fromarray((x.cpu().detach().numpy() * 255).astype(np.uint8)) 
+    # save_images(input[:num_samples,:,:,:], os.path.join("results", run_name, f"{epoch}_input.jpg"))
+    # save_images(images[:num_samples,:,:,:], os.path.join("results", run_name, f"{epoch}_truth.jpg"))
     os.makedirs("models/{}".format(run_name), exist_ok = True)
     torch.save(net.state_dict(), os.path.join("models", run_name, f"ckpt.pt"))
     torch.save(optimizer.state_dict(), os.path.join("models", run_name, f"optim.pt"))
@@ -336,8 +340,8 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         #print(i)
 
         input, truth = data
-        # if i ==0 and epoch ==0:
-        sample(input,epoch-1)
+        if i ==0 and epoch ==0:
+            sample(input,epoch-1)
         
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
