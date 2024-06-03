@@ -85,7 +85,8 @@ class Net(nn.Module):
         #input of (N, 3, 224, 224), output of (N, 256)
         self.encoder = nn.Sequential(
             resnet,
-            nn.MaxPool1d(kernel_size=2, stride=2, padding=0), #Using a layer which isnt trainable so I can reduce the size while keeping it frozen.
+            nn.MaxPool1d(kernel_size=2, stride=2, padding=0), #Using a layer which isnt trainable so I can reduce the size while keeping it frozen. output of (N,256)
+            nn.LayerNorm([256])#normalize it to be within reasonable bounds
         )
         
         self.diffusion_model = diffusion_model #input of (N,256) output of (N,3,64,64)
@@ -253,7 +254,7 @@ small_img_criterion = nn.MSELoss()
 img_criterion = nn.MSELoss()
 rew_criterion = nn.MSELoss()
 don_criterion = nn.MSELoss()
-optimizer = optim.AdamW(net.parameters(), lr=3e-4)
+optimizer = optim.AdamW(net.parameters(), lr=3e-2)
 
 if os.path.exists("models/Pong_Generator/optim.pt"):
     print("loading optimizer from file")
@@ -391,6 +392,6 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
 
     if epoch % 10 == 0 or epoch == num_epochs - 1+epoch_offset:
-        sample(input,epoch)
+        sample(input,epoch,images,small_images)
 
 print('Finished Training')
