@@ -304,14 +304,16 @@ if os.path.exists(image_dir):
         epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files]) + 1
 
 
-def sample(input,epoch,images):
+def sample(input,epoch,images,small_images):
     net.eval()
     #make only 3 images or a max of batch size
     num_samples = min(3,batch_size)
     sampled_images = net.forward(input[:num_samples,:,:,:])[0]
-    sampled_input = (input[:num_samples,:,:,:].clamp(-1, 1) + 1) / 2
+    sampled_input = input[:num_samples,:,:,:]
     sampled_input = (sampled_input * 255).type(torch.uint8)
-    sampled_truths = (images[:num_samples,:,:,:].clamp(-1, 1) + 1) / 2
+    sampled_small_truths = small_images[:num_samples,:,:,:]
+    sampled_small_truths = (sampled_small_truths * 255).type(torch.uint8)
+    sampled_truths = images[:num_samples,:,:,:]
     sampled_truths = (sampled_truths * 255).type(torch.uint8)
     assert type(sampled_images) == type(sampled_input), "sampled image type is:{}, while input is type:{}".format(type(sampled_images),type(sampled_input))
     # assert sampled_images.size() == sampled_input.size(), "sampled image size is:{}, while input size is:{}".format(sampled_images.size(),sampled_input.size())
@@ -319,9 +321,10 @@ def sample(input,epoch,images):
     #print(sampled_images)
     #plot_images(sampled_images)
     os.makedirs("results/{}".format(run_name), exist_ok = True)
-    save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
+    save_images(sampled_images, os.path.join("results", run_name, f"{epoch}_model.jpg"))
     # adjust = lambda x : Image.fromarray((x.cpu().detach().numpy() * 255).astype(np.uint8)) 
     save_images(sampled_input, os.path.join("results", run_name, f"{epoch}_input.jpg"))
+    save_images(sampled_small_truths, os.path.join("results", run_name, f"{epoch}_small_truth.jpg"))
     save_images(sampled_truths, os.path.join("results", run_name, f"{epoch}_truth.jpg"))
     os.makedirs("models/{}".format(run_name), exist_ok = True)
     torch.save(net.state_dict(), os.path.join("models", run_name, f"ckpt.pt"))
@@ -354,7 +357,7 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         assert(images.size() == (batch_size,3,224,224), "size is " + str(small_images.size()))
 
         if i ==0 and epoch ==0:
-            sample(input,epoch-1,images)
+            sample(input,epoch-1,images,small_images)
 
         #get levels of noised images
         t = diffusion.sample_timesteps(small_images.shape[0]).to(device) #get <batch size> number of t's
@@ -376,7 +379,7 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
         loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
         loss3 = don_criterion(don,truth[3])
-        loss = loss0 + loss2 + loss3
+        loss = loss0 + loss1 + loss2 + loss3
 
         # zero the parameter gradients
         optimizer.zero_grad()
