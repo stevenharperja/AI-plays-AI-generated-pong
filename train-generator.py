@@ -260,7 +260,7 @@ if os.path.exists("models/Pong_Generator/optim.pt"):
     print("loading optimizer from file")
     optimizer.load_state_dict(torch.load("models/Pong_Generator/optim.pt"))
 
-image_importance = 10 #hyperparameter for weighting how important the image is in the loss function.
+# image_importance = 10 #hyperparameter for weighting how important the image is in the loss function.
 
 
 # %%
@@ -304,18 +304,25 @@ if os.path.exists(image_dir):
         epoch_offset = max([int(''.join([c for c in f if c.isdigit()])) for f in existing_files]) + 1
 
 
-def sample(input,epoch):
+def sample(input,epoch,images):
     net.eval()
     #make only 3 images or a max of batch size
     num_samples = min(3,batch_size)
     sampled_images = net.forward(input[:num_samples,:,:,:])[0]
+    sampled_input = (input[:num_samples,:,:,:].clamp(-1, 1) + 1) / 2
+    sampled_input = (sampled_input * 255).type(torch.uint8)
+    sampled_truths = (images[:num_samples,:,:,:].clamp(-1, 1) + 1) / 2
+    sampled_truths = (sampled_truths * 255).type(torch.uint8)
+    assert type(sampled_images) == type(sampled_input), "sampled image type is:{}, while input is type:{}".format(type(sampled_images),type(sampled_input))
+    # assert sampled_images.size() == sampled_input.size(), "sampled image size is:{}, while input size is:{}".format(sampled_images.size(),sampled_input.size())
+
     #print(sampled_images)
     #plot_images(sampled_images)
     os.makedirs("results/{}".format(run_name), exist_ok = True)
     save_images(sampled_images, os.path.join("results", run_name, f"{epoch}.jpg"))
     # adjust = lambda x : Image.fromarray((x.cpu().detach().numpy() * 255).astype(np.uint8)) 
-    # save_images(input[:num_samples,:,:,:], os.path.join("results", run_name, f"{epoch}_input.jpg"))
-    # save_images(images[:num_samples,:,:,:], os.path.join("results", run_name, f"{epoch}_truth.jpg"))
+    save_images(sampled_input, os.path.join("results", run_name, f"{epoch}_input.jpg"))
+    save_images(sampled_truths, os.path.join("results", run_name, f"{epoch}_truth.jpg"))
     os.makedirs("models/{}".format(run_name), exist_ok = True)
     torch.save(net.state_dict(), os.path.join("models", run_name, f"ckpt.pt"))
     torch.save(optimizer.state_dict(), os.path.join("models", run_name, f"optim.pt"))
@@ -338,20 +345,21 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
     input = None
     for i, data in enumerate(pbar, 0):
         #print(i)
-
+        #get the data
         input, truth = data
-        if i ==0 and epoch ==0:
-            sample(input,epoch-1)
-        
+        #get the images
         small_images = truth[0] #64 by 64 image
         images = truth[1] #224 by 224 image
         assert(small_images.size() == (batch_size,3,64,64), "size is " + str(small_images.size()))
+        assert(images.size() == (batch_size,3,224,224), "size is " + str(small_images.size()))
 
+        if i ==0 and epoch ==0:
+            sample(input,epoch-1,images)
 
-        
+        #get levels of noised images
         t = diffusion.sample_timesteps(small_images.shape[0]).to(device) #get <batch size> number of t's
         x_t, small_noise = diffusion.noise_images(small_images, t) #TODO change the random noise to not be reallocated in memory so that the time complexity is less.
-
+        #make the noise big in case we want to use upscaled image
         noise = big_transform(small_noise)#sadly i dont think this can be quickened
 
         use_embedding = True
@@ -363,8 +371,9 @@ for epoch in range(epoch_offset,num_epochs+epoch_offset):  # loop over the datas
 
         # print(predicted_noise)
         # assert False
+        #compare noise and the small predicted noise
         loss0 = small_img_criterion(small_noise,small_predicted_noise)
-        # loss1 = img_criterion(noise,predicted_noise)
+        loss1 = img_criterion(noise,predicted_noise)
         loss2 = rew_criterion(rew,truth[2])
         loss3 = don_criterion(don,truth[3])
         loss = loss0 + loss2 + loss3
