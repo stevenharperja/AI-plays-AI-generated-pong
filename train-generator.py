@@ -86,7 +86,7 @@ class Net(nn.Module):
         self.encoder = nn.Sequential(
             resnet,
             nn.MaxPool1d(kernel_size=2, stride=2, padding=0), #Using a layer which isnt trainable so I can reduce the size while keeping it frozen. output of (N,256)
-            nn.LayerNorm([256])#normalize it to be within reasonable bounds
+            nn.LayerNorm(256,elementwise_affine=False)#normalize it to be within reasonable bounds
         )
         
         self.diffusion_model = diffusion_model #input of (N,256) output of (N,3,64,64)
