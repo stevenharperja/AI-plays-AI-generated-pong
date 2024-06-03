@@ -100,11 +100,10 @@ class Saver():
         if self.in_transform == None or self.out_transform == None:
             return(input,truth)
         input = self.in_transform(input)
-        #make the pong image bigger
-        truth[0] = self.out_transform(truth[0])
         #add a small version of the pong image into index 0.
         truth = [self.small_transform(truth[0])] + truth
-
+        #make the pong image bigger
+        truth[1] = self.out_transform(truth[1])
         return input,truth
 
     def _make_pe(self):

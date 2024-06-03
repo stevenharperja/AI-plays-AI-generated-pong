@@ -19,10 +19,12 @@ import math
 import argparse
 from torchvision.transforms import InterpolationMode
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-n", "--data_amount", type=int, default=10000)
-args = parser.parse_args()
-max_t = args.data_amount
+from conditional_diffusion.utils import plot_images
+
+# parser = argparse.ArgumentParser()
+# parser.add_argument("-n", "--data_amount", type=int, default=10000)
+# args = parser.parse_args()
+# max_t = args.data_amount
 
 # %%
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -100,10 +102,10 @@ class Saver():
         if self.in_transform == None or self.out_transform == None:
             return(input,truth)
         input = self.in_transform(input)
-        #make the pong image bigger
-        truth[0] = self.out_transform(truth[0])
         #add a small version of the pong image into index 0.
         truth = [self.small_transform(truth[0])] + truth
+        #make the pong image bigger
+        truth[1] = self.out_transform(truth[1])
 
         return input,truth
 
@@ -184,7 +186,7 @@ class Saver():
 
 # %%
 
-save_dir = "diffusion_training_data/"
+save_dir = "viewing_data/"
 imagenet_stats = ((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))
 diffusion_stats = ((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 
@@ -216,12 +218,50 @@ def run_pong(n_episodes, max_t,saver):
         
 
 # %%
-max_t = 1 #maximum number of files you want
+max_t =10 #maximum number of files you want
 n_episodes = max(max_t//100,1) #number of episodes you want to run
 saver = Saver(save_dir,in_transform=in_transform,out_transform=out_transform, small_transform=small_transform, file_limit=max_t)
 run_pong(n_episodes,max_t,saver)
 
 # %%
+def getinput(index,save_dir=save_dir):
 
+    #use data which was preformatted for the 'trivial' model
+    input = torch.load(save_dir+"input{i}.pt".format(i=index))
+    assert input.shape == (3,224,224)
+    return input
+def gettruth(index,save_dir=save_dir):
+    truth = torch.load(save_dir+"truth{i}.pt".format(i=index))
+    assert len(truth) == 4, "length is {}".format(len(truth))
+    assert truth[0].shape == (3,64,64)
+    assert truth[1].shape == (3,224,224), "shape is {}".format(truth[1].shape)
+    assert truth[2].shape == (1,)
+    assert truth[3].shape == (1,)
+    return truth
+# %%
+def view(num_images):
+    #get the images
+    input = torch.stack([getinput(i) for i in range(num_images)],dim=0)
+    truths = torch.stack([gettruth(i)[1] for i in range(num_images)],dim=0)
+    small_truths = torch.stack([gettruth(i)[0] for i in range(num_images)],dim=0)
 
+    #plot the images
+    print("Input")
+    sampled_input = input#(input[:num_images,:,:,:].clamp(-1, 1) + 1) / 2
+    sampled_input = (sampled_input * 255).type(torch.uint8)
+    print("Small Truths")
+    sampled_small_truths = small_truths#(small_truths[:num_images,:,:,:].clamp(-1, 1) + 1) / 2
+    sampled_small_truths = (sampled_small_truths * 255).type(torch.uint8)
+    print("Truths")
+    sampled_truths = truths#(truths[:num_images,:,:,:].clamp(-1, 1) + 1) / 2
+    sampled_truths = (sampled_truths * 255).type(torch.uint8)
 
+    #print(sampled_images)
+    plot_images(sampled_input)
+    plot_images(sampled_small_truths)
+    plot_images(sampled_truths)
+
+# %%
+
+view(5)
+# %%
