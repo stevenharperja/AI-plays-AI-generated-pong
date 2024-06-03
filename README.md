@@ -208,3 +208,6 @@ The techniques used with both the Diffusion and AI agent likely don't let the mo
 - Upscaler model
     - https://paperswithcode.com/paper/image-super-resolution-using-deep
     - https://github.com/yjn870/SRCNN-pytorch/blob/master/models.py
+
+- really understanding diffusion models ddpm
+    - [explains how variance works](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/)
