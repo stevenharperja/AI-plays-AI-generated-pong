@@ -75,7 +75,7 @@ class Net(nn.Module):
         diffusion_model.outc.requires_grad = True
 
         ###init upscaler model
-        upscaler = nn.Upsample(size=(224,224), mode="nearest")
+        self.upscaler = nn.Upsample(size=(224,224), mode="nearest")
         # nn.Sequential(
         #     nn.Upsample(size=(224,224), mode="nearest"),
         #     modules.DoubleConv(3,3,residual=True),
@@ -89,7 +89,6 @@ class Net(nn.Module):
         )
         
         self.diffusion_model = diffusion_model #input of (N,256) output of (N,3,64,64)
-        self.upscaler = upscaler
         self.final_layer = nn.Conv2d(in_channels=3, out_channels=1, kernel_size=1, stride=1, padding=0) # reduce channel size to 1 for black and white
         #input of (N, 256), output of (N, 1)
         self.reward_maker = nn.Sequential(
@@ -150,8 +149,8 @@ class Net(nn.Module):
         
         """
         n = x.size()[0]
-        #embedding = torch.zeros((n,256)).to(self.device) 
-        embedding = self.zero_embedding.repeat((n,1))
+        embedding = torch.zeros((n,256)).to(self.device) 
+        # embedding = self.zero_embedding.repeat((n,1))
         if (not self.training) or use_embedding:#if testing, or have use embedding on.
             embedding = self.encoder(x) #(n,256)       
         assert embedding.size() == (n,256)
