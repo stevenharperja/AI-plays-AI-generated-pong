@@ -254,7 +254,7 @@ small_img_criterion = nn.MSELoss()
 img_criterion = nn.MSELoss()
 rew_criterion = nn.MSELoss()
 don_criterion = nn.MSELoss()
-optimizer = optim.AdamW(net.parameters(), lr=3e-2)
+optimizer = optim.AdamW(net.parameters(), lr=3e-3)
 
 if os.path.exists("models/Pong_Generator/optim.pt"):
     print("loading optimizer from file")
