@@ -34,14 +34,26 @@ It has been a popular type of model for image generation in recent years. So I t
 
 ## 3. Implementation
 
-For simplicity, and in order to learn a famous architecture, I chose to implement the generator network using a Diffusion network. This consisted of a UNet and adapted the model code from [here](https://github.com/dome272/Diffusion-Models-pytorch), and also retrained weights provided there as well. the model uses 64 by 64 images, I chose it because it was the only pretrained one I could find that was small enough to fit on my GPU reliably.
+For simplicity, and in order to learn a famous architecture, I chose to implement the generator network using a Diffusion network. This consisted of a UNet and adapted code and weights from [here](https://github.com/dome272/Diffusion-Models-pytorch. The model only works with 64 by 64 images. I chose it because it was the only pretrained one I could find that was small enough to fit on my GPU reliably.
 
-The agent was never implemented because I was unable to get a good generator working, and ran out of time to finish the project by my self-imposed deadline.
+The agent was never implemented because I was unable to get a good generator working in time.
 
 ## 4. Conclusion
-The project had many hiccups and every time I thought I solved the problems with the generator, it still didn't work. I had to fix the data a lot.
-The best results I got were a white jpg.
-Since 
+The project had many hiccups and every time I thought I solved the problems with the generator, it still didn't work. I had to fix the data a lot, normalizing it and making sure it was interprettable.
+
+Even still though, instead of images of Pong, the best results I got were a white jpg.  
+
+![A picture which is clearly not pong](documents/image.png)  
+
+### further work
+While there aren't a lot of leads for what I can try, I think one option could be to try training the model with a lower learning rate.
+Otherwise, I'm unsure what else there is that I haven't explored.  
+
+If I were to revisit this project, I would want to try a different model, probably one thats more suited to this topic. I didn't know about world models before making this, and there's a lot more literature that I thought there was about it. So I think I'd want to try retraining one of those.
+
+### See also
+There are other models that have done similar things in this topic.
+If you are interested in learning more, I would recommend looking into World Models for Reinforcement learning. Some examples are [Dreamer](https://github.com/danijar/dreamerv3) and [Oasis](https://oasis-model.github.io/)
 
 ## 5. Bibliography
 - About diffusion networks
